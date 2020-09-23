@@ -33,6 +33,7 @@ function QuestTile(props: Props) {
 
   return (
     <motion.li
+      // layoutId={`quest-tile-${quest.id}`}
       layoutId={`quest-tile-${quest.id}-${props.fullscreen ? "f" : "t"}`}
       className={`${styles.questTile} ${
         props.fullscreen ? styles.fullscreen : ""
@@ -52,6 +53,13 @@ function QuestTile(props: Props) {
           e.stopPropagation();
         }}
       >
+        {props.fullscreen && (
+          <motion.button
+            className={styles.quit}
+            dangerouslySetInnerHTML={{ __html: "&times;" }}
+            onClick={() => hist.push("/quest/lists")}
+          />
+        )}
         <motion.div className={styles.image} layoutId={`quest-img-${quest.id}`}>
           IMG
         </motion.div>

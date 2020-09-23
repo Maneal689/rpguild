@@ -12,7 +12,7 @@
   }
   &.fullscreen {
     position: fixed;
-    top: 0;
+    top: 3em;
     bottom: 0;
     left: 0;
     right: 0;
@@ -27,10 +27,22 @@
     .container {
       background-color: white;
       padding: 1em;
+      padding-top: 2em;
       border-bottom-left-radius: 0;
       border-bottom-right-radius: 0;
+      max-height: 100%;
+      overflow-y: scroll;
+      position: relative;
       &:hover {
         cursor: default;
+      }
+      .quit {
+        position: absolute;
+        background: none;
+        border: none;
+        top: 5px;
+        right: 5px;
+        font-size: 2em;
       }
     }
   }

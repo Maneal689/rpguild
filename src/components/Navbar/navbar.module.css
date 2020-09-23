@@ -12,6 +12,7 @@
   background-color: #4E6950;
   color: white;
   box-sizing: border-box;
+  z-index: 10000;
 }
 
 .navbar * {

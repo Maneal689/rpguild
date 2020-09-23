@@ -47,8 +47,8 @@ badd +14 components/SiteNavbar/SiteNavbar.tsx
 badd +1 components/ApplyQuest/CharacterTile.tsx
 badd +9 pages/ApplyQuest.tsx
 badd +10 components/CharacterTile/CharacterTile.tsx
-badd +56 components/QuestTile/QuestTile.tsx
-badd +232 pages/QuestList.tsx
+badd +1 components/QuestTile/QuestTile.tsx
+badd +10 pages/QuestList.tsx
 badd +14 components/QuestTile/style.module.scss
 argglobal
 %argdel
@@ -80,53 +80,11 @@ setlocal fdn=20
 setlocal fen
 21
 normal! zo
-34
-normal! zo
-41
-normal! zo
-42
-normal! zo
-47
+35
 normal! zo
 48
 normal! zo
-55
-normal! zo
-60
-normal! zo
-52
-normal! zo
-55
-normal! zo
-60
-normal! zo
-56
-normal! zo
-60
-normal! zo
-56
-normal! zo
-57
-normal! zo
-61
-normal! zo
-61
-normal! zo
-46
-normal! zo
-55
-normal! zo
-57
-normal! zo
-65
-normal! zo
-69
-normal! zo
-69
-normal! zo
-67
-normal! zo
-72
+66
 normal! zo
 let s:l = 35 - ((13 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
@@ -147,9 +105,9 @@ setlocal fdn=20
 setlocal fen
 3
 normal! zo
-24
+13
 normal! zo
-36
+27
 normal! zo
 let s:l = 13 - ((12 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
@@ -182,24 +140,78 @@ setlocal fen
 normal! zo
 135
 normal! zo
-197
+198
 normal! zo
-214
+200
 normal! zo
-225
+201
 normal! zo
-226
+223
 normal! zo
 227
 normal! zo
+228
+normal! zo
+239
+normal! zo
+240
+normal! zo
+208
+normal! zo
+223
+normal! zo
+227
+normal! zo
+228
+normal! zo
+239
+normal! zo
+240
+normal! zo
+217
+normal! zo
+227
+normal! zo
+228
+normal! zo
+239
+normal! zo
+240
+normal! zo
+239
+normal! zo
+240
+normal! zo
+227
+normal! zo
+228
+normal! zo
+239
+normal! zo
+240
+normal! zo
+226
+normal! zo
+230
+normal! zo
+231
+normal! zo
 234
 normal! zo
-let s:l = 225 - ((30 * winheight(0) + 22) / 45)
+240
+normal! zo
+242
+normal! zo
+243
+normal! zo
+244
+normal! zo
+let s:l = 54 - ((41 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-225
-normal! 012|
+54
+normal! 024|
 tabedit App.tsx
 set splitbelow splitright
 set nosplitbelow
@@ -220,8 +232,6 @@ setlocal fdn=20
 setlocal fen
 22
 normal! zo
-57
-normal! zo
 58
 normal! zo
 let s:l = 70 - ((29 * winheight(0) + 22) / 45)
@@ -230,7 +240,7 @@ exe s:l
 normal! zt
 70
 normal! 020|
-tabnext 1
+tabnext 2
 set stal=1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

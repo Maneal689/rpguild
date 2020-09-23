@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useRecoilValue } from "recoil";
 import { useParams, useHistory, Route } from "react-router-dom";
-import { AnimateSharedLayout, AnimatePresence, motion } from "framer-motion";
+import { AnimateSharedLayout, AnimatePresence } from "framer-motion";
 
 import { db } from "../services/firebase";
 import { isApplied } from "../helpers/quest";
@@ -140,6 +140,7 @@ function QuestList() {
   );
   const [loading, setLoading] = useState<boolean>(true);
   const [applyQuestOnly, setApplyQuestOnly] = useState<boolean>(false);
+  const [displayHelp, setDisplayHelp] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const hist = useHistory();
 
@@ -197,6 +198,12 @@ function QuestList() {
     <div className="content">
       <SiteNavbar />
       <section className={`${styles.sign}`}>
+        <aside
+          className={styles.helpTrigger}
+          onClick={() => setDisplayHelp((old) => !old)}
+        >
+          <i title="Légende des icônes" className="far fa-question-circle" />
+        </aside>
         <p>Bienvenue à toi cher(e) aventurièr(e) !</p>
         <p>
           Je suppose que tu n'es pas venu(e) ici pour boire un verre, mais
@@ -207,6 +214,14 @@ function QuestList() {
           <em className={styles.green}>Maîtres de Jeu</em>" du monde entier !
         </p>
         <p>Bon courage !</p>
+        <button
+          className={`${styles.arrow} ${
+            applyQuestOnly ? styles.left : styles.right
+          }`}
+          onClick={() => setApplyQuestOnly((old) => !old)}
+        >
+          <i className={`fas fa-angle-${applyQuestOnly ? "left" : "right"}`} />
+        </button>
       </section>
       <AnimateSharedLayout type="crossfade">
         {loading ? (
@@ -214,6 +229,7 @@ function QuestList() {
         ) : (
           <>
             <ul className={`${styles.questList}`}>
+              {/* TODO: Add info tile when no quest */}
               {fQuestList.map((quest, index) => (
                 <QuestTile
                   quest={quest}
