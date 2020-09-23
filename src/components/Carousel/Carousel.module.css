@@ -1,0 +1,99 @@
+.carousel {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+}
+.slide-container {
+  height: 100%;
+  min-height: 100%;
+  position: relative;
+  transition: all ease 0.3s;
+}
+
+.slide {
+  height: 100%;
+  min-width: 100%;
+  width: 100%;
+  max-width: 100%;
+}
+
+.slider {
+  min-width: 100%;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  overflow: visible;
+  display: flex;
+  flex-wrap: nowrap;
+  position: relative;
+  transition: all ease 0.3s;
+}
+
+.button {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button:hover {
+  cursor: pointer;
+}
+
+.button.previous:hover {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2));
+}
+
+.button.next:hover {
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+}
+
+.button.previous {
+  left: 0;
+}
+
+.button.next {
+  right: 0;
+}
+
+.indicators {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 24px;
+  width: 100%;
+  padding: 0 20%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-sizing: border-box;
+  transition: all ease 0.3s;
+}
+
+.indicators:hover {
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.indicators .indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid black;
+}
+
+
+.indicators .indicator:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.indicators .indicator.active {
+  background-color: black;
+}

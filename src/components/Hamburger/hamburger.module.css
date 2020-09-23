@@ -1,0 +1,50 @@
+.hamburger-container {
+  position: relative;
+  width: 22px;
+  height: 15px;
+  display: block;
+  transition: all ease 0.3s;
+  z-index: 10001;
+}
+
+.hamburger-container:hover {
+  cursor: pointer;
+}
+
+.hamburger,
+.hamburger::before,
+.hamburger::after {
+  display: block;
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 2px;
+  background-color: black;
+  transition: all ease 0.3s;
+}
+
+.hamburger::before {
+  top: -6px;
+}
+
+.hamburger {
+  top: 6px;
+}
+
+.hamburger::after {
+  top: 6px;
+}
+
+.hamburger.active {
+  background-color: transparent;
+}
+
+.hamburger.active::before {
+  transform: rotate(45deg);
+  top: 0px;
+}
+
+.hamburger.active::after {
+  transform: rotate(-45deg);
+  top: 0px;
+}

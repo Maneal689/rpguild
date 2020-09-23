@@ -1,0 +1,25 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600&display=swap%27');
+
+.questTile {
+  display: flex;
+  width: 100%;
+  div:nth-child(1) {
+    display: flex;
+    align-items: center;
+    padding: 0 0.5em;
+    width: 20%;
+    height: auto;
+    box-sizing: border-box;
+  }
+  div:nth-child(2) {
+    width: 80%;
+    h2 {
+      margin: 0;
+      font-family: oswald;
+    }
+    & > * {
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+}
