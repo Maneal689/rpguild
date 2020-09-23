@@ -41,15 +41,41 @@ badd +9 types/Quest.ts
 badd +53 pages/Quest.tsx
 badd +55 pages/CreateQuest.tsx
 badd +3 components/ApplyQuest/index.ts
-badd +23 components/ApplyQuest/ApplyQuest.tsx
+badd +1 components/ApplyQuest/ApplyQuest.tsx
 badd +3 components/SiteNavbar/index.ts
 badd +14 components/SiteNavbar/SiteNavbar.tsx
-badd +14 components/ApplyQuest/CharacterTile.tsx
+badd +1 components/ApplyQuest/CharacterTile.tsx
+badd +1 pages/ApplyQuest.tsx
+badd +1 components/CharacterTile/CharacterTile.tsx
 argglobal
 %argdel
 $argadd App.tsx
 set stal=2
-edit components/ApplyQuest/ApplyQuest.tsx
+edit pages/ApplyQuest.tsx
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
+argglobal
+setlocal fdm=syntax
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=8
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+let s:l = 6 - ((5 * winheight(0) + 23) / 46)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+6
+normal! 0
+tabedit components/CharacterTile/CharacterTile.tsx
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -67,70 +93,12 @@ setlocal fdl=0
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-12
-normal! zo
-17
-normal! zo
-64
-normal! zo
-77
-normal! zo
-81
-normal! zo
-83
-normal! zo
-let s:l = 1 - ((0 * winheight(0) + 23) / 46)
+let s:l = 10 - ((9 * winheight(0) + 23) / 46)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-1
+10
 normal! 0
-tabedit components/ApplyQuest/CharacterTile.tsx
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winminheight=0
-set winheight=1
-set winminwidth=0
-set winwidth=1
-argglobal
-setlocal fdm=syntax
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=5
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-17
-normal! zo
-27
-normal! zo
-46
-normal! zo
-37
-normal! zo
-54
-normal! zo
-47
-normal! zo
-61
-normal! zo
-70
-normal! zo
-63
-normal! zo
-66
-normal! zo
-63
-normal! zo
-let s:l = 14 - ((13 * winheight(0) + 23) / 46)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-14
-normal! 031|
 tabnext 1
 set stal=1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
