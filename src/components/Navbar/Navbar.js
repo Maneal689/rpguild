@@ -1,14 +1,15 @@
 import React, { useState, useMemo } from "react";
-import PropTypes from "prop-types";
 
 import Hamburger from "../Hamburger";
+import NavbarBrand from "./NavbarBrand";
+import NavbarItem from "./NavbarItem";
 
 import styles from "./navbar.module.css";
 
 function getBrand(children) {
   let res = null;
   React.Children.forEach(children, (child) => {
-    if (child.type.name === "NavbarBrand") res = child;
+    if (child.type.name === NavbarBrand.name) res = child;
   });
   return res;
 }
@@ -16,7 +17,7 @@ function getBrand(children) {
 function getItems(children, right = false) {
   return React.Children.map(children, (child) => {
     if (
-      child.type.name === "NavbarItem" &&
+      child.type.name === NavbarItem.name &&
       child.props.right == (right == false ? undefined : true)
     )
       return child;
