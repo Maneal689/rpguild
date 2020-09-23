@@ -15,6 +15,7 @@ import { QuestInfoType } from "../types/Quest";
 
 import QuestTile from "../components/QuestTile";
 import SiteNavbar from "../components/SiteNavbar";
+import Loader from "../components/Loader";
 
 import styles from "../styles/QuestList.module.scss";
 
@@ -172,15 +173,15 @@ function QuestList() {
         <p>
           Je suppose que tu n'es pas venu(e) ici pour boire un verre, mais
           plutôt pour une mission ? Je te laisse rejoindre le tableau de quête
-          ce-dessous.
+          ci-dessous.
           <br />
-          Tu y trouvera différentes quêtes proposées par des "Maîtres de Jeu" du
-          monde entier !
+          Tu y trouvera différentes quêtes proposées par des "
+          <em className={styles.green}>Maîtres de Jeu</em>" du monde entier !
         </p>
         <p>Bon courage !</p>
       </section>
       {loading ? (
-        "loading..."
+        <Loader />
       ) : (
         <ul className={`${styles.questList}`}>
           {fQuestList.map((quest, index) => (

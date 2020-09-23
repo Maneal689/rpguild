@@ -12,6 +12,8 @@ import {
   validPToQuest,
 } from "../../helpers/quest";
 
+import styles from "./style.module.scss";
+
 interface Props {
   quest: QuestInfoType;
   questList: QuestInfoType[];
@@ -21,7 +23,8 @@ interface Props {
 function Controls(props: Props) {
   const { quest, dispatchQuest } = props;
   const user = useRecoilValue(userState);
-  const status = user.uid in quest.participants ? quest.participants[user.uid].status : null;
+  const status =
+    user.uid in quest.participants ? quest.participants[user.uid].status : null;
   const character = useRecoilValue(characterState);
   const [loading, setLoading] = useState<boolean>(false);
   const hist = useHistory();
@@ -80,36 +83,57 @@ function Controls(props: Props) {
     });
   };
 
-  if (loading) return <div>loading...</div>;
+  if (loading) return <><i className={`fas fa-spinner fa-spin ${styles.disabled}`} /></>;
   else if (
     user.uid in quest.participants &&
     quest.participants[user.uid].character !== character.id
   )
-    return <div>Vous avez déjà un personnage participant à cette quête</div>;
+    return (
+      <>
+        <i className={`fas fa-ban ${styles.disabled}`} />
+      </>
+    );
   else if (applied && status) {
     if (status === "pending")
       return (
-        <div>
-          En attente de la réponse du MJ
-          <button onClick={unapply}>Annuler la candidature</button>
-        </div>
+        <>
+          <i className={`fas fa-hourglass-half ${styles.disabled}`} />
+          <button onClick={unapply}>
+            <i className={`fas fa-ban ${styles.red}`} />
+          </button>
+        </>
       );
     else if (status === "accepted")
       return (
-        <div>
-          <button onClick={valid}>Valider participation</button>
-          <button onClick={unapply}>Annuler la candidature</button>
-        </div>
+        <>
+          <button onClick={valid}>
+            <i className={`far fa-check-circle ${styles.green}`} />
+          </button>
+          <button onClick={unapply}>
+            <i className={`fas fa-ban ${styles.red}`} />
+          </button>
+        </>
       );
-    else if (status === "rejected") return <div>Rejeté</div>;
+    else if (status === "rejected")
+      return (
+        <>
+          <i className={`far fa-times-circle ${styles.disabled}`} />
+        </>
+      );
     else if (status === "member")
-      return <div>Vous faites parti de la quête</div>;
+      return (
+        <>
+          <i className={`far fa-check-circle ${styles.disabled}`} />
+        </>
+      );
   }
   // if (!applied)
   return (
-    <div>
-      <button onClick={apply}>Postuler</button>
-    </div>
+    <>
+      <button onClick={apply}>
+        <i className={`fab fa-telegram-plane ${styles.green}`} />
+      </button>
+    </>
   );
 }
 

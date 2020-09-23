@@ -1,9 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600&display=swap%27');
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@600&display=swap%27");
 
 .questTile {
   display: flex;
   width: 100%;
-  div:nth-child(1) {
+  padding: 1.5em 0;
+  border-bottom: 1px solid #ccc;
+
+  .image {
     display: flex;
     align-items: center;
     padding: 0 0.5em;
@@ -11,15 +14,72 @@
     height: auto;
     box-sizing: border-box;
   }
-  div:nth-child(2) {
+  .content {
     width: 80%;
     h2 {
       margin: 0;
       font-family: oswald;
+      font-weight: 900;
+      letter-spacing: 0px;
     }
-    & > * {
+    .date {
+      font-weight: 200;
+    }
+    .lvlRange {
+      font-weight: 200;
+      strong {
+        color: #4e6950;
+      }
+    }
+    .userCount {
+      font-family: oswald;
+      font-weight: 800;
+      i {
+        font-size: 1.5em;
+        color: #aaa;
+        margin-right: 0.5em;
+        font-weight: 100;
+      }
+    }
+
+    .controls {
+      display: flex;
+      margin-top: 0.5em;
+      i {
+        font-size: 1.5em;
+        margin-left: 0.5em;
+        transition: all ease 0.3s;
+        &:hover {
+          transform: rotate(360deg);
+          cursor: pointer;
+        }
+        &.disabled {
+          color: #aaa;
+          cursor: default;
+          &:hover {
+            transform: none;
+          }
+        }
+      }
+      button {
+        border: none;
+        background: none;
+        padding: 0;
+      }
+    }
+
+    section {
       display: flex;
       justify-content: space-between;
+      align-items: baseline;
+      // align-items: center;
     }
   }
+}
+
+.red {
+  color: #7a5140;
+}
+.green {
+  color: #4e6950;
 }

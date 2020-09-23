@@ -1,6 +1,7 @@
 
 html {
   font-size: calc(0.85rem + 0.05vw);
+  color: #131313;
 }
 
 .content {

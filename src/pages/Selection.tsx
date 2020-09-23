@@ -115,6 +115,7 @@ const Selection = () => {
         {masterQuestList.map((quest, index) => (
           <div
             key={index}
+            style={{overflow: "hidden"}}
             onClick={() => {
               if (quest.started) hist.push(`/quest/${quest.id}`);
               else hist.push(`/quest/apply/${quest.id}`);

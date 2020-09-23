@@ -5,11 +5,11 @@ import { useHistory } from "react-router-dom";
 import { Navbar, NavbarBrand, NavbarItem } from "../Navbar";
 
 import characterState from "../../store/character";
-import userState from "../../store/user";
+// import userState from "../../store/user";
 import { logout } from "../../helpers/auth";
 
 function SiteNavbar() {
-  const user = useRecoilValue(userState);
+  // const user = useRecoilValue(userState);
   const [character, setCharacter] = useRecoilState(characterState);
 
   const hist = useHistory();

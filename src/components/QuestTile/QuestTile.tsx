@@ -29,24 +29,30 @@ function QuestTile(props: Props) {
 
   return (
     <li className={`${styles.questTile}`}>
-      <div>IMG</div>
-      <div>
+      <div className={styles.image}>IMG</div>
+      <div className={styles.content}>
         <h2>{quest.title}</h2>
         <section>
-          <span>{quest.date && format(new Date(quest.date), "dd/LL/yyyy")}</span>
-          <span>{quest.levelMin} - {quest.levelMax}</span>
+          <span className={styles.date}>
+            Le {quest.date && format(new Date(quest.date), "dd/LL/yyyy")}
+          </span>
+          <span className={styles.lvlRange}>
+            Niveaux <strong>{quest.levelMin}</strong> à{" "}
+            <strong>{quest.levelMax}</strong>
+          </span>
         </section>
         <section>
-          <span>
-            {/* <FontAwesomeIcon icon={["fas", "user"]} size="sm" /> */}
+          <span className={styles.userCount}>
             <i className="far fa-user" />
             {nbMember(quest)} / {quest.wantedParticipants}
           </span>
-          <Controls
-            quest={quest}
-            questList={props.questList}
-            dispatchQuest={dispatchQuest}
-          />
+          <span className={styles.controls}>
+            <Controls
+              quest={quest}
+              questList={props.questList}
+              dispatchQuest={dispatchQuest}
+            />
+          </span>
         </section>
       </div>
     </li>

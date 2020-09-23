@@ -1,0 +1,15 @@
+.loader {
+  width: 100%;
+  text-align: center;
+  font-size: 3em;
+  color: #AAA;
+  margin-top: 1em;
+  &.fullscreen {
+    font-size: 6em;
+    position: fixed;
+    top: 50vh;
+    left: 0;
+    margin: 0;
+    transform: translateY(-50%);
+  }
+}
