@@ -7,7 +7,7 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +51 App.tsx
+badd +68 App.tsx
 badd +1 services/firebase-admin.js
 badd +21 services/firebase.js
 badd +9 helpers/auth.js
@@ -27,7 +27,7 @@ badd +6 App.test.tsx
 badd +22 components/Carousel/Carousel.js
 badd +5 store/character.ts
 badd +7 components/Navbar/index.js
-badd +40 components/Navbar/Navbar.js
+badd +7 components/Navbar/Navbar.js
 badd +6 components/Navbar/navbar.module.css
 badd +3 styles/dashboard.module.scss
 badd +7 components/Tabs/index.js
@@ -45,13 +45,122 @@ badd +1 components/ApplyQuest/ApplyQuest.tsx
 badd +3 components/SiteNavbar/index.ts
 badd +14 components/SiteNavbar/SiteNavbar.tsx
 badd +1 components/ApplyQuest/CharacterTile.tsx
-badd +1 pages/ApplyQuest.tsx
-badd +1 components/CharacterTile/CharacterTile.tsx
+badd +9 pages/ApplyQuest.tsx
+badd +10 components/CharacterTile/CharacterTile.tsx
+badd +56 components/QuestTile/QuestTile.tsx
+badd +232 pages/QuestList.tsx
+badd +14 components/QuestTile/style.module.scss
 argglobal
 %argdel
 $argadd App.tsx
 set stal=2
-edit pages/ApplyQuest.tsx
+edit components/QuestTile/QuestTile.tsx
+set splitbelow splitright
+wincmd _ | wincmd |
+vsplit
+1wincmd h
+wincmd w
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
+exe 'vert 1resize ' . ((&columns * 104 + 104) / 208)
+exe 'vert 2resize ' . ((&columns * 103 + 104) / 208)
+argglobal
+setlocal fdm=syntax
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=6
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+21
+normal! zo
+34
+normal! zo
+41
+normal! zo
+42
+normal! zo
+47
+normal! zo
+48
+normal! zo
+55
+normal! zo
+60
+normal! zo
+52
+normal! zo
+55
+normal! zo
+60
+normal! zo
+56
+normal! zo
+60
+normal! zo
+56
+normal! zo
+57
+normal! zo
+61
+normal! zo
+61
+normal! zo
+46
+normal! zo
+55
+normal! zo
+57
+normal! zo
+65
+normal! zo
+69
+normal! zo
+69
+normal! zo
+67
+normal! zo
+72
+normal! zo
+let s:l = 35 - ((13 * winheight(0) + 22) / 45)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+35
+normal! 09|
+wincmd w
+argglobal
+if bufexists("components/QuestTile/style.module.scss") | buffer components/QuestTile/style.module.scss | else | edit components/QuestTile/style.module.scss | endif
+setlocal fdm=syntax
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=6
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+3
+normal! zo
+24
+normal! zo
+36
+normal! zo
+let s:l = 13 - ((12 * winheight(0) + 22) / 45)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+13
+normal! 05|
+wincmd w
+exe 'vert 1resize ' . ((&columns * 104 + 104) / 208)
+exe 'vert 2resize ' . ((&columns * 103 + 104) / 208)
+tabedit pages/QuestList.tsx
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -65,17 +174,33 @@ setlocal fdm=syntax
 setlocal fde=0
 setlocal fmr={{{,}}}
 setlocal fdi=#
-setlocal fdl=8
+setlocal fdl=5
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-let s:l = 6 - ((5 * winheight(0) + 23) / 46)
+28
+normal! zo
+135
+normal! zo
+197
+normal! zo
+214
+normal! zo
+225
+normal! zo
+226
+normal! zo
+227
+normal! zo
+234
+normal! zo
+let s:l = 225 - ((30 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-6
-normal! 0
-tabedit components/CharacterTile/CharacterTile.tsx
+225
+normal! 012|
+tabedit App.tsx
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -89,42 +214,23 @@ setlocal fdm=syntax
 setlocal fde=0
 setlocal fmr={{{,}}}
 setlocal fdi=#
-setlocal fdl=0
+setlocal fdl=6
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-let s:l = 10 - ((9 * winheight(0) + 23) / 46)
+22
+normal! zo
+57
+normal! zo
+58
+normal! zo
+let s:l = 70 - ((29 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-10
-normal! 0
-tabedit components/Navbar/Navbar.js
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winminheight=0
-set winheight=1
-set winminwidth=0
-set winwidth=1
-argglobal
-setlocal fdm=syntax
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=0
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-let s:l = 1 - ((0 * winheight(0) + 23) / 46)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-1
-normal! 0
-lcd ~/work/projects/rpguild/src
-tabnext 3
+70
+normal! 020|
+tabnext 1
 set stal=1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

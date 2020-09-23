@@ -6,7 +6,8 @@ import React, {
   useReducer,
 } from "react";
 import { useRecoilValue } from "recoil";
-import { useHistory } from "react-router-dom";
+import { useParams, useHistory, Route } from "react-router-dom";
+import { AnimateSharedLayout, AnimatePresence, motion } from "framer-motion";
 
 import { db } from "../services/firebase";
 import { isApplied } from "../helpers/quest";
@@ -18,6 +19,33 @@ import SiteNavbar from "../components/SiteNavbar";
 import Loader from "../components/Loader";
 
 import styles from "../styles/QuestList.module.scss";
+
+interface Props {
+  questList: QuestInfoType[];
+  dispatchQuest: any;
+}
+
+function QuestTileWrapper(props: Props) {
+  const { questList, dispatchQuest } = props;
+  const { id: selectedQuestId } = useParams();
+
+  const selectedQuest = useMemo<QuestInfoType | null>(() => {
+    for (let q of questList) {
+      if (q.id === selectedQuestId) return q;
+    }
+    return null;
+  }, [questList, selectedQuestId]);
+  if (selectedQuest)
+    return (
+      <QuestTile
+        quest={selectedQuest}
+        questList={questList}
+        dispatchQuest={dispatchQuest}
+        fullscreen
+      />
+    );
+  return null;
+}
 
 const defaultQuestState: QuestInfoType[] = [];
 
@@ -180,20 +208,32 @@ function QuestList() {
         </p>
         <p>Bon courage !</p>
       </section>
-      {loading ? (
-        <Loader />
-      ) : (
-        <ul className={`${styles.questList}`}>
-          {fQuestList.map((quest, index) => (
-            <QuestTile
-              quest={quest}
-              questList={questList}
-              key={index}
-              dispatchQuest={dispatchQuest}
-            />
-          ))}
-        </ul>
-      )}
+      <AnimateSharedLayout type="crossfade">
+        {loading ? (
+          <Loader />
+        ) : (
+          <>
+            <ul className={`${styles.questList}`}>
+              {fQuestList.map((quest, index) => (
+                <QuestTile
+                  quest={quest}
+                  questList={questList}
+                  key={index}
+                  dispatchQuest={dispatchQuest}
+                />
+              ))}
+            </ul>
+            <AnimatePresence>
+              <Route path="/quest/lists/:id">
+                <QuestTileWrapper
+                  questList={questList}
+                  dispatchQuest={dispatchQuest}
+                />
+              </Route>
+            </AnimatePresence>
+          </>
+        )}
+      </AnimateSharedLayout>
     </div>
   );
 }

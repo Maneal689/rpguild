@@ -19,7 +19,6 @@ function Home(props: any) {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          window.alert("Connecting");
           try {
             if (login) {
               await signin(email, password);

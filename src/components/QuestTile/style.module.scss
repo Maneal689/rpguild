@@ -5,74 +5,115 @@
   width: 100%;
   padding: 1.5em 0;
   border-bottom: 1px solid #ccc;
-
-  .image {
-    display: flex;
-    align-items: center;
-    padding: 0 0.5em;
-    width: 20%;
-    height: auto;
-    box-sizing: border-box;
+  box-sizing: border-box;
+  a {
+    color: black;
+    text-decoration: none;
   }
-  .content {
-    width: 80%;
-    h2 {
-      margin: 0;
-      font-family: oswald;
-      font-weight: 900;
-      letter-spacing: 0px;
+  &.fullscreen {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow-y: scroll;
+    &:hover {
+      cursor: pointer;
     }
-    .date {
-      font-weight: 200;
-    }
-    .lvlRange {
-      font-weight: 200;
-      strong {
-        color: #4e6950;
+    .container {
+      background-color: white;
+      padding: 1em;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      &:hover {
+        cursor: default;
       }
     }
-    .userCount {
-      font-family: oswald;
-      font-weight: 800;
-      i {
-        font-size: 1.5em;
-        color: #aaa;
-        margin-right: 0.5em;
-        font-weight: 100;
-      }
-    }
-
-    .controls {
+  }
+  .container {
+    display: flex;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    .image {
       display: flex;
-      margin-top: 0.5em;
-      i {
-        font-size: 1.5em;
-        margin-left: 0.5em;
-        transition: all ease 0.3s;
-        &:hover {
-          transform: rotate(360deg);
-          cursor: pointer;
+      align-items: center;
+      padding: 0 0.5em;
+      width: 20%;
+      height: auto;
+      box-sizing: border-box;
+    }
+    .content {
+      width: 80%;
+      h2 {
+        margin: 0;
+        margin-bottom: 0.3em;
+        font-family: oswald;
+        font-weight: 900;
+        letter-spacing: 0px;
+      }
+      .date {
+        font-weight: 200;
+        color: #888;
+      }
+      .lvlRange {
+        font-weight: 200;
+        color: #888;
+        strong {
+          color: #4e6950;
         }
-        &.disabled {
+      }
+      .desc {
+        text-align: justify;
+        line-height: 1.5em;
+      }
+      .userCount {
+        font-family: oswald;
+        font-weight: 800;
+        i {
+          font-size: 1.5em;
           color: #aaa;
-          cursor: default;
+          margin-right: 0.5em;
+          font-weight: 100;
+        }
+      }
+
+      .controls {
+        display: flex;
+        margin-top: 0.5em;
+        i {
+          font-size: 1.5em;
+          margin-left: 0.5em;
+          transition: all ease 0.3s;
           &:hover {
-            transform: none;
+            transform: rotate(360deg);
+            cursor: pointer;
+          }
+          &.disabled {
+            color: #aaa;
+            cursor: default;
+            &:hover {
+              transform: none;
+            }
           }
         }
+        button {
+          border: none;
+          background: none;
+          padding: 0;
+        }
       }
-      button {
-        border: none;
-        background: none;
-        padding: 0;
-      }
-    }
 
-    section {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      // align-items: center;
+      section {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        // align-items: center;
+      }
     }
   }
 }

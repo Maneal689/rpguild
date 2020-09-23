@@ -38,7 +38,7 @@ function App() {
             setCharacter({
               loading: false,
               id: characterDoc.id,
-              ...characterDoc.data() as CharacterDataType,
+              ...(characterDoc.data() as CharacterDataType),
             });
           })
           .catch((e) => console.error(e.message));
@@ -56,10 +56,7 @@ function App() {
   return (
     <Router>
       <Switch>
-        <LoginRoute exact path="/">
-          <Home />
-        </LoginRoute>
-        <LoginRoute exact path="/home">
+        <LoginRoute exact path={["/", "/home"]}>
           <Home />
         </LoginRoute>
         <AuthRoute exact path="/selection">
@@ -68,7 +65,7 @@ function App() {
         <AuthRoute exact path="/createQuest">
           <CreateQuest />
         </AuthRoute>
-        <AuthRoute exact path="/quest/lists">
+        <AuthRoute path={["/quest/lists", "/quest/lists/:id"]}>
           <QuestList />
         </AuthRoute>
         <AuthRoute exact path="/quest/:id">

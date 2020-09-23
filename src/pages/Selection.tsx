@@ -28,7 +28,7 @@ const Selection = () => {
     db.collection("users")
       .doc(user.uid)
       .collection("characters")
-      .add({ name: characterName });
+      .add({ name: characterName, level: 0 });
   }, [user.uid]);
 
   // Redirect if character selected
@@ -94,7 +94,7 @@ const Selection = () => {
         <ul>
           {characterList.map((char, index) => (
             <li
-              style={{overflow: "hidden"}}
+              style={{ overflow: "hidden" }}
               key={index}
               onClick={() => {
                 localStorage.setItem(
@@ -115,7 +115,7 @@ const Selection = () => {
         {masterQuestList.map((quest, index) => (
           <div
             key={index}
-            style={{overflow: "hidden"}}
+            style={{ overflow: "hidden" }}
             onClick={() => {
               if (quest.started) hist.push(`/quest/${quest.id}`);
               else hist.push(`/quest/apply/${quest.id}`);
