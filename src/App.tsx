@@ -25,10 +25,8 @@ function App() {
 
   useEffect(() => {
     if (!user.loading && character.loading) {
-      if (localStorage.getItem("character")) {
-        const { id: characterId } = JSON.parse(
-          localStorage.getItem("character") as string
-        );
+      if (localStorage.getItem(user.uid)) {
+        const characterId = localStorage.getItem(user.uid) as string;
         db.collection("users")
           .doc(user.uid)
           .collection("characters")
@@ -41,7 +39,10 @@ function App() {
               ...(characterDoc.data() as CharacterDataType),
             });
           })
-          .catch((e) => console.error(e.message));
+          .catch((e) => {
+            console.error(e.message);
+            setCharacter({ loading: false, id: null });
+          });
       } else setCharacter({ loading: false, id: null });
     }
   }, [character, setCharacter, user]);

@@ -36,7 +36,8 @@ function Controls(props: Props) {
     );
   }, [character.id, props.questList]);
 
-  const unapply = function () {
+  const unapply = function (e: any) {
+    e.stopPropagation();
     setLoading(true);
     unapplyToQuest(quest, user.uid).then(() => {
       dispatchQuest({
@@ -50,7 +51,8 @@ function Controls(props: Props) {
     });
   };
 
-  const apply = function () {
+  const apply = function (e: any) {
+    e.stopPropagation();
     if (character.id) {
       setLoading(true);
       applyToQuest(quest, user.uid, character.id).then(() => {
@@ -67,7 +69,8 @@ function Controls(props: Props) {
     }
   };
 
-  const valid = function () {
+  const valid = function (e: any) {
+    e.stopPropagation();
     setLoading(true);
     validPToQuest(quest, appliedQuestList, user.uid).then(() => {
       dispatchQuest({
@@ -83,7 +86,12 @@ function Controls(props: Props) {
     });
   };
 
-  if (loading) return <><i className={`fas fa-spinner fa-spin ${styles.disabled}`} /></>;
+  if (loading)
+    return (
+      <>
+        <i className={`fas fa-spinner fa-spin ${styles.disabled}`} />
+      </>
+    );
   else if (
     user.uid in quest.participants &&
     quest.participants[user.uid].character !== character.id

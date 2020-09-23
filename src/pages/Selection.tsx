@@ -97,10 +97,7 @@ const Selection = () => {
               style={{ overflow: "hidden" }}
               key={index}
               onClick={() => {
-                localStorage.setItem(
-                  "character",
-                  JSON.stringify({ id: char.id })
-                );
+                localStorage.setItem(user.uid, char.id);
                 setCharacter(char);
               }}
             >
