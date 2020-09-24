@@ -66,7 +66,7 @@ function App() {
         <AuthRoute exact path="/createQuest">
           <CreateQuest />
         </AuthRoute>
-        <AuthRoute path={["/quest/lists", "/quest/lists/:id"]}>
+        <AuthRoute path="/quest/lists/:id?">
           <QuestList />
         </AuthRoute>
         <AuthRoute exact path="/quest/:id">

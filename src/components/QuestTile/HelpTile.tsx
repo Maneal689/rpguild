@@ -6,6 +6,7 @@ import styles from "./style.module.scss";
 interface Props {
   show: boolean;
   close: () => void;
+  displayTour: () => void;
 }
 
 function HelpTile(props: Props) {
@@ -48,6 +49,13 @@ function HelpTile(props: Props) {
                   <strong>acceptée</strong>
                 </dd>
                 <dt>
+                  <i className={`fas fa-hourglass-half ${styles.disabled}`} />
+                </dt>
+                <dd>
+                  Votre candidature est en <strong>attente</strong> de la
+                  réponse du MJ
+                </dd>
+                <dt>
                   <i className={`far fa-check-circle ${styles.disabled}`} />
                 </dt>
                 <dd>
@@ -78,6 +86,10 @@ function HelpTile(props: Props) {
                   <strong>confirmez</strong> votre participation à cette quête
                 </dd>
               </dl>
+              <button className={styles.displayTour} onClick={() => {
+                props.close();
+                props.displayTour();
+              }}>Démarrer la visite guidée</button>
             </div>
           </div>
         </motion.div>

@@ -32,6 +32,7 @@ function CreateQuest() {
       master: user.uid,
       date: new Date().toString(),
     };
+    /* console.log("form: ", e.target.questImgName.files); */
 
     db.collection("quests")
       .add(newQuest)

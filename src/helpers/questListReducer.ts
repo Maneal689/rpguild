@@ -73,6 +73,8 @@ export function questReducer(state: QuestInfoType[], action: any) {
   switch (action.type) {
     case "INIT":
       return action.payload;
+    case "ADD":
+      return [...state, ...action.payload];
     case "APPLY":
       return apply(state, action.payload.questId);
     case "UNAPPLY":

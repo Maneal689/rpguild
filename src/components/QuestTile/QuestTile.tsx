@@ -34,6 +34,7 @@ function QuestTile(props: Props) {
   return (
     <motion.li
       // layoutId={`quest-tile-${quest.id}`}
+      layout
       layoutId={`quest-tile-${quest.id}-${props.fullscreen ? "f" : "t"}`}
       className={`${styles.questTile} ${
         props.fullscreen ? styles.fullscreen : ""
@@ -48,6 +49,7 @@ function QuestTile(props: Props) {
       <motion.div
         className={styles.container}
         layoutId={`quest-container-${quest.id}`}
+        layout
         onClick={(e) => {
           if (!props.fullscreen) hist.push(`/quest/lists/${quest.id}`);
           e.stopPropagation();
@@ -60,17 +62,22 @@ function QuestTile(props: Props) {
             onClick={() => hist.push("/quest/lists")}
           />
         )}
-        <motion.div className={styles.image} layoutId={`quest-img-${quest.id}`}>
+        <motion.div
+          layout
+          className={styles.image}
+          layoutId={`quest-img-${quest.id}`}
+        >
           IMG
         </motion.div>
         <motion.div
           className={styles.content}
           layoutId={`quest-infos-${quest.id}`}
+          layout
         >
-          <motion.h2 layoutId={`quest-title-${quest.id}`}>
+          <motion.h2 layout layoutId={`quest-title-${quest.id}`}>
             {quest.title}
           </motion.h2>
-          <motion.section layoutId={`quest-lvndate-${quest.id}`}>
+          <motion.section layout layoutId={`quest-lvndate-${quest.id}`}>
             <span className={styles.lvlRange}>
               Niveaux <strong>{quest.levelMin}</strong> à{" "}
               <strong>{quest.levelMax}</strong>
@@ -82,10 +89,11 @@ function QuestTile(props: Props) {
           <motion.section
             className={styles.desc}
             layoutId={`quest-desc-${quest.id}`}
+            layout
           >
             {props.fullscreen && <p>{quest.description}</p>}
           </motion.section>
-          <motion.section layoutId={`quest-controls-${quest.id}`}>
+          <motion.section layoutId={`quest-controls-${quest.id}`} layout>
             <span className={styles.userCount}>
               <i className="far fa-user" />
               {nbMember(quest)} / {quest.wantedParticipants}

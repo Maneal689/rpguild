@@ -11,6 +11,7 @@
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
     "@types/react-router-dom": "^5.1.5",
+    "@types/reactour": "^1.17.1",
     "date-fns": "^2.16.1",
     "firebase": "^7.19.1",
     "framer-motion": "^2.7.0",
@@ -20,7 +21,9 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "reactour": "^1.18.0",
     "recoil": "^0.0.11",
+    "styled-components": "^4.0.0",
     "typescript": "~3.7.2"
   },
   "scripts": {

@@ -4,49 +4,127 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
+  useCallback,
 } from "react";
 import { useRecoilValue } from "recoil";
-import { useHistory, Route } from "react-router-dom";
-import { AnimateSharedLayout, AnimatePresence } from "framer-motion";
+import { useHistory, useParams } from "react-router-dom";
+import { AnimateSharedLayout, AnimatePresence, motion } from "framer-motion";
+import Tour from "reactour";
 
 import { db } from "../services/firebase";
 import { isApplied } from "../helpers/quest";
+import userState from "../store/user";
 import characterState from "../store/character";
 import { QuestInfoType } from "../types/Quest";
 import { questReducer, defaultQuestState } from "../helpers/questListReducer";
 
-import {
-  QuestTile,
-  SelectedQuestTileWrapper,
-  HelpTile,
-} from "../components/QuestTile";
-
+import { QuestTile, HelpTile } from "../components/QuestTile";
 import SiteNavbar from "../components/SiteNavbar";
 import Loader from "../components/Loader";
 import SignText from "../components/SignText";
 
 import styles from "../styles/QuestList.module.scss";
 
+const steps = [
+  {
+    selector: "#quest-list",
+    content: (
+      <div>
+        Vous trouverez ici la liste des quêtes <strong>disponibles</strong>
+      </div>
+    ),
+  },
+  {
+    selector: "#loadMore",
+    content: (
+      <div>
+        Cliquez ici pour charger plus de <strong>quêtes</strong>
+      </div>
+    ),
+  },
+  {
+    selector: "#help-btn",
+    content: (
+      <div>
+        Si vous n'avez pas encore appris notre langue, cliquez ici, tous les
+        symboles utilisés vous seront expliqués.
+        <br />
+        De plus, vous pourrez me rappeler de là !
+      </div>
+    ),
+  },
+  {
+    selector: "#quest-list-toggler",
+    content: (
+      <div>
+        Cliquez ici pour <strong>alterner</strong> entre vos candidatures et toutes les
+        quêtes
+      </div>
+    ),
+  },
+];
+
 function QuestList() {
   const character = useRecoilValue(characterState);
+  const user = useRecoilValue(userState);
   const [questList, dispatchQuest] = useReducer<Reducer<QuestInfoType[], any>>(
     questReducer,
     defaultQuestState
   );
-  const [loading, setLoading] = useState<boolean>(true);
-  const [applyQuestOnly, setApplyQuestOnly] = useState<boolean>(false);
+  const [selectedQuest, setSelectedQuest] = useState<QuestInfoType | null>(
+    null
+  );
+  const [lastQDoc, setLastQDoc] = useState<any>(null);
+
+  const [initTour, setInitTour] = useState<boolean>(false);
+  const [displayTour, setDisplayTour] = useState<boolean>(false);
   const [displayHelp, setDisplayHelp] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+
+  const [applyQuestOnly, setApplyQuestOnly] = useState<boolean>(false);
+  const { id: selectedQuestId } = useParams();
   const hist = useHistory();
 
-  const appliedQuestIdList = useMemo(() => {
-    if (character.id) {
-      return questList
-        .filter((quest) => isApplied(quest, character.id))
-        .map((quest) => quest.id);
+  // Find selected quest or fetch data if not in current list
+  useEffect(() => {
+    // If quest is selected && selectedQuest not already loaded
+    if (
+      selectedQuestId &&
+      (!selectedQuest ||
+        !selectedQuest.id ||
+        selectedQuest.id !== selectedQuestId)
+    ) {
+      let finded = false;
+      for (let q of questList) {
+        if (q.id === selectedQuestId) {
+          setSelectedQuest(q);
+          finded = true;
+        }
+      }
+      if (!finded) {
+        db.collection("quests")
+          .doc(selectedQuestId)
+          .get()
+          .then((questDoc) => {
+            setSelectedQuest({
+              id: questDoc.id,
+              ...(questDoc.data() as QuestInfoType),
+            });
+          });
+      }
     }
-    return [];
-  }, [character.id, questList]);
+  }, [questList, selectedQuest, selectedQuestId]);
+
+  //Disable tour for next time
+  useEffect(() => {
+    if (!loading && !initTour) {
+      setInitTour(true);
+      localStorage.setItem("questTour", "true");
+      if (localStorage.getItem("questTour") !== "true") setDisplayTour(true);
+    }
+  }, [displayTour, initTour, loading]);
 
   // Redirect if no character selected or already in quest
   useEffect(() => {
@@ -55,10 +133,15 @@ function QuestList() {
       hist.replace(`/quest/${character.currentQuest}`);
   }, [character, hist]);
 
-  // Fetch quests data list
+  // Every time onlyApplied toggles => Fetch quests (all 20 first quests or all applied quests)
   useEffect(() => {
-    if (character.id) {
+    setLoading(true);
+    dispatchQuest({ type: "INIT", payload: [] });
+    if (!applyQuestOnly) {
       db.collection("quests")
+        .where("started", "==", false)
+        .orderBy("date", "desc")
+        .limit(20)
         .get()
         .then((snapshot) => {
           let res: QuestInfoType[] = [];
@@ -66,35 +149,75 @@ function QuestList() {
             const quest = questDoc.data();
             res.push({ id: questDoc.id, ...(quest as QuestInfoType) });
           });
-          dispatchQuest({ type: "INIT", payload: res });
+          if (res.length > 0) {
+            let lastDoc = snapshot.docs[snapshot.docs.length - 1];
+            setLastQDoc(lastDoc);
+            dispatchQuest({ type: "INIT", payload: res });
+          }
+        })
+        .catch((e) => setError(e.message))
+        .finally(() => setLoading(false));
+    } else {
+      db.collection("quests")
+        .where(`participants.${user.uid}.character`, "==", character.id)
+        .get()
+        .then((snapshot) => {
+          let res: QuestInfoType[] = [];
+          snapshot.forEach((questDoc) => {
+            const quest = questDoc.data();
+            res.push({ id: questDoc.id, ...(quest as QuestInfoType) });
+          });
+          if (res.length > 0) {
+            dispatchQuest({ type: "INIT", payload: res });
+          }
         })
         .catch((e) => setError(e.message))
         .finally(() => setLoading(false));
     }
-  }, [character]);
+  }, [applyQuestOnly, character.id, user.uid]);
 
-  // Filtered quest list
-  const fQuestList = useMemo(() => {
-    return questList.filter((quest) => {
-      if (applyQuestOnly) {
-        return appliedQuestIdList.indexOf(quest.id) !== -1;
-      }
-
-      if (character.id)
-        return (
-          character.level >= quest.levelMin && character.level <= quest.levelMax
-        );
-      return false;
-    });
-  }, [appliedQuestIdList, applyQuestOnly, character, questList]);
+  const fetchQuests = useCallback(() => {
+    setLoading(true);
+    db.collection("quests")
+      .where("started", "==", false)
+      .orderBy("date", "desc")
+      .limit(20)
+      .startAfter(lastQDoc)
+      .get()
+      .then((snapshot) => {
+        let res: QuestInfoType[] = [];
+        snapshot.forEach((questDoc) => {
+          const quest = questDoc.data();
+          res.push({ id: questDoc.id, ...(quest as QuestInfoType) });
+        });
+        if (res.length > 0) {
+          let lastDoc = snapshot.docs[snapshot.docs.length - 1];
+          setLastQDoc(lastDoc);
+          dispatchQuest({ type: "ADD", payload: res });
+        }
+      })
+      .catch((e) => setError(e.message))
+      .finally(() => setLoading(false));
+  }, [lastQDoc]);
 
   if (error) return <div className="content">{error}</div>;
   return (
     <div className="content">
       <SiteNavbar />
-      <HelpTile show={displayHelp} close={() => setDisplayHelp(false)} />
+      <Tour
+        isOpen={displayTour}
+        onRequestClose={() => setDisplayTour(false)}
+        steps={steps}
+        accentColor="#4e6950"
+      />
+      <HelpTile
+        show={displayHelp}
+        close={() => setDisplayHelp(false)}
+        displayTour={() => setDisplayTour(true)}
+      />
       <section className={`${styles.sign}`}>
         <aside
+          id="help-btn"
           className={styles.helpTrigger}
           onClick={() => setDisplayHelp((old) => !old)}
         >
@@ -102,6 +225,7 @@ function QuestList() {
         </aside>
         <SignText appliedOnly={applyQuestOnly} />
         <button
+          id="quest-list-toggler"
           className={`${styles.arrow} ${
             applyQuestOnly ? styles.left : styles.right
           }`}
@@ -111,32 +235,46 @@ function QuestList() {
         </button>
       </section>
       <AnimateSharedLayout type="crossfade">
-        {loading ? (
-          <Loader />
-        ) : (
-          <>
-            <ul className={`${styles.questList}`}>
-              {/* TODO: Add info tile when no quest */}
-              {fQuestList.map((quest, index) => (
-                <QuestTile
-                  quest={quest}
-                  questList={questList}
-                  key={index}
-                  dispatchQuest={dispatchQuest}
-                />
-              ))}
-            </ul>
-            <AnimatePresence>
-              <Route path="/quest/lists/:id">
-                <SelectedQuestTileWrapper
-                  questList={questList}
-                  dispatchQuest={dispatchQuest}
-                />
-              </Route>
-            </AnimatePresence>
-          </>
-        )}
+        <motion.ul id="quest-list" className={`${styles.questList}`} layout>
+          {/* TODO: Add info tile when no quest */}
+          {questList.map((quest) => (
+            <QuestTile
+              quest={quest}
+              questList={questList}
+              key={quest.id}
+              dispatchQuest={dispatchQuest}
+            />
+          ))}
+        </motion.ul>
+        <AnimatePresence>
+          {selectedQuestId &&
+            selectedQuest &&
+            selectedQuest.id === selectedQuestId && (
+              <QuestTile
+                quest={selectedQuest}
+                questList={questList}
+                dispatchQuest={dispatchQuest}
+                key={selectedQuest.id}
+                fullscreen
+              />
+            )}
+        </AnimatePresence>
       </AnimateSharedLayout>
+      {loading ? (
+        <Loader />
+      ) : (
+        !applyQuestOnly && (
+          <div className={styles.fetchMoreContainer}>
+            <button
+              id="loadMore"
+              className={styles.fetchBtn}
+              onClick={fetchQuests}
+            >
+              +
+            </button>
+          </div>
+        )
+      )}
     </div>
   );
 }
