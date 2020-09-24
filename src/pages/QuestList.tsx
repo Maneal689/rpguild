@@ -6,131 +6,26 @@ import React, {
   useReducer,
 } from "react";
 import { useRecoilValue } from "recoil";
-import { useParams, useHistory, Route } from "react-router-dom";
+import { useHistory, Route } from "react-router-dom";
 import { AnimateSharedLayout, AnimatePresence } from "framer-motion";
 
 import { db } from "../services/firebase";
 import { isApplied } from "../helpers/quest";
 import characterState from "../store/character";
 import { QuestInfoType } from "../types/Quest";
+import { questReducer, defaultQuestState } from "../helpers/questListReducer";
 
-import QuestTile from "../components/QuestTile";
+import {
+  QuestTile,
+  SelectedQuestTileWrapper,
+  HelpTile,
+} from "../components/QuestTile";
+
 import SiteNavbar from "../components/SiteNavbar";
 import Loader from "../components/Loader";
+import SignText from "../components/SignText";
 
 import styles from "../styles/QuestList.module.scss";
-
-interface Props {
-  questList: QuestInfoType[];
-  dispatchQuest: any;
-}
-
-function QuestTileWrapper(props: Props) {
-  const { questList, dispatchQuest } = props;
-  const { id: selectedQuestId } = useParams();
-
-  const selectedQuest = useMemo<QuestInfoType | null>(() => {
-    for (let q of questList) {
-      if (q.id === selectedQuestId) return q;
-    }
-    return null;
-  }, [questList, selectedQuestId]);
-  if (selectedQuest)
-    return (
-      <QuestTile
-        quest={selectedQuest}
-        questList={questList}
-        dispatchQuest={dispatchQuest}
-        fullscreen
-      />
-    );
-  return null;
-}
-
-const defaultQuestState: QuestInfoType[] = [];
-
-function questReducer(state: QuestInfoType[], action: any) {
-  function unapply(oState: QuestInfoType[], questId: string) {
-    let questIndex = -1;
-    let newQuest = null;
-
-    for (let i = 0; i < oState.length && questIndex === -1; i++) {
-      if (oState[i].id === questId) questIndex = i;
-    }
-    if (questIndex !== -1) {
-      newQuest = Object.assign({}, oState[questIndex]);
-      delete newQuest.participants[action.payload.userId];
-      return [
-        ...oState.slice(0, questIndex),
-        newQuest,
-        ...oState.slice(questIndex + 1),
-      ];
-    } else return oState;
-  }
-
-  function apply(oState: QuestInfoType[], questId: string) {
-    let questIndex = -1;
-    let newQuest = null;
-
-    for (let i = 0; i < oState.length && questIndex === -1; i++) {
-      if (oState[i].id === questId) questIndex = i;
-    }
-
-    if (questIndex !== -1) {
-      newQuest = Object.assign({}, oState[questIndex]);
-      newQuest.participants[action.payload.userId] = {
-        status: "pending",
-        character: action.payload.characterId,
-      };
-      return [
-        ...oState.slice(0, questIndex),
-        newQuest,
-        ...oState.slice(questIndex + 1),
-      ];
-    } else return oState;
-  }
-
-  function valid(oState: QuestInfoType[], questId: string) {
-    let questIndex = -1;
-    let newQuest = null;
-
-    for (let i = 0; i < oState.length && questIndex === -1; i++) {
-      if (oState[i].id === questId) questIndex = i;
-    }
-    if (questIndex !== -1) {
-      const characterId =
-        oState[questIndex].participants[action.payload.userId].character;
-      newQuest = Object.assign({}, oState[questIndex]);
-      newQuest.participants[action.payload.userId] = {
-        status: "member",
-        character: characterId,
-      };
-      let newState = [
-        ...oState.slice(0, questIndex),
-        newQuest,
-        ...oState.slice(questIndex + 1),
-      ];
-      for (let q of action.payload.appliedQuestList) {
-        if (q.id !== questId) newState = unapply(newState, q.id);
-      }
-      return newState;
-    } else return oState;
-  }
-
-  switch (action.type) {
-    case "INIT":
-      return action.payload;
-    case "APPLY":
-      return apply(state, action.payload.questId);
-    case "UNAPPLY":
-      return unapply(state, action.payload.questId);
-    case "VALID":
-      return valid(state, action.payload.questId);
-
-    default:
-      return state;
-  }
-}
 
 function QuestList() {
   const character = useRecoilValue(characterState);
@@ -197,6 +92,7 @@ function QuestList() {
   return (
     <div className="content">
       <SiteNavbar />
+      <HelpTile show={displayHelp} close={() => setDisplayHelp(false)} />
       <section className={`${styles.sign}`}>
         <aside
           className={styles.helpTrigger}
@@ -204,16 +100,7 @@ function QuestList() {
         >
           <i title="Légende des icônes" className="far fa-question-circle" />
         </aside>
-        <p>Bienvenue à toi cher(e) aventurièr(e) !</p>
-        <p>
-          Je suppose que tu n'es pas venu(e) ici pour boire un verre, mais
-          plutôt pour une mission ? Je te laisse rejoindre le tableau de quête
-          ci-dessous.
-          <br />
-          Tu y trouvera différentes quêtes proposées par des "
-          <em className={styles.green}>Maîtres de Jeu</em>" du monde entier !
-        </p>
-        <p>Bon courage !</p>
+        <SignText appliedOnly={applyQuestOnly} />
         <button
           className={`${styles.arrow} ${
             applyQuestOnly ? styles.left : styles.right
@@ -241,7 +128,7 @@ function QuestList() {
             </ul>
             <AnimatePresence>
               <Route path="/quest/lists/:id">
-                <QuestTileWrapper
+                <SelectedQuestTileWrapper
                   questList={questList}
                   dispatchQuest={dispatchQuest}
                 />

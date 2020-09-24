@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Oswald:wght@600&display=swap%27");
 
-.questTile {
+.questTile,
+.helpTile {
   display: flex;
   width: 100%;
   padding: 1.5em 0;
@@ -21,6 +22,7 @@
     flex-direction: column;
     justify-content: flex-end;
     overflow-y: scroll;
+    z-index: 5000;
     &:hover {
       cursor: pointer;
     }
@@ -102,7 +104,6 @@
           margin-left: 0.5em;
           transition: all ease 0.3s;
           &:hover {
-            transform: rotate(360deg);
             cursor: pointer;
           }
           &.disabled {
@@ -125,6 +126,26 @@
         justify-content: space-between;
         align-items: baseline;
         // align-items: center;
+      }
+    }
+  }
+}
+
+.helpTile {
+  .container {
+    .content {
+      width: 100%;
+      h2 {
+        text-align: center;
+      }
+      dl:not(:last-child) {
+        margin-bottom: 2em;
+      }
+      i {
+        font-size: 1.5em;
+        &.disabled {
+          color: #aaa;
+        }
       }
     }
   }

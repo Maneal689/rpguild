@@ -7,7 +7,7 @@ if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
   let s:wipebuf = bufnr('%')
 endif
 set shortmess=aoO
-badd +68 App.tsx
+badd +70 App.tsx
 badd +1 services/firebase-admin.js
 badd +21 services/firebase.js
 badd +9 helpers/auth.js
@@ -26,7 +26,7 @@ badd +5 components/AuthRoute.tsx
 badd +6 App.test.tsx
 badd +22 components/Carousel/Carousel.js
 badd +5 store/character.ts
-badd +7 components/Navbar/index.js
+badd +5 components/Navbar/index.js
 badd +7 components/Navbar/Navbar.js
 badd +6 components/Navbar/navbar.module.css
 badd +3 styles/dashboard.module.scss
@@ -47,14 +47,23 @@ badd +14 components/SiteNavbar/SiteNavbar.tsx
 badd +1 components/ApplyQuest/CharacterTile.tsx
 badd +9 pages/ApplyQuest.tsx
 badd +10 components/CharacterTile/CharacterTile.tsx
-badd +1 components/QuestTile/QuestTile.tsx
-badd +10 pages/QuestList.tsx
-badd +14 components/QuestTile/style.module.scss
+badd +99 components/QuestTile/QuestTile.tsx
+badd +91 pages/QuestList.tsx
+badd +141 components/QuestTile/style.module.scss
+badd +1 helpers/quest.ts
+badd +3 helpers/questListReducer.ts
+badd +11 App.css
+badd +45 styles/QuestList.module.scss
+badd +26 components/SignText.tsx
+badd +7 components/QuestTile/index.ts
+badd +14 components/QuestTile/SelectedQuestTileWrapper.tsx
+badd +29 components/QuestTile/HelpTile.tsx
+badd +0 components/QuestTile/Controls.tsx
 argglobal
 %argdel
 $argadd App.tsx
 set stal=2
-edit components/QuestTile/QuestTile.tsx
+edit components/QuestTile/HelpTile.tsx
 set splitbelow splitright
 wincmd _ | wincmd |
 vsplit
@@ -74,24 +83,148 @@ setlocal fdm=syntax
 setlocal fde=0
 setlocal fmr={{{,}}}
 setlocal fdi=#
-setlocal fdl=6
+setlocal fdl=1
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-21
+11
+normal! zo
+13
+normal! zo
+15
+normal! zo
+23
+normal! zo
+24
+normal! zo
+29
 normal! zo
 35
 normal! zo
-48
+36
 normal! zo
-66
+40
 normal! zo
-let s:l = 35 - ((13 * winheight(0) + 22) / 45)
+43
+normal! zo
+47
+normal! zo
+50
+normal! zo
+56
+normal! zo
+59
+normal! zo
+62
+normal! zo
+65
+normal! zo
+68
+normal! zo
+71
+normal! zo
+39
+normal! zo
+43
+normal! zo
+47
+normal! zo
+50
+normal! zo
+56
+normal! zo
+59
+normal! zo
+62
+normal! zo
+65
+normal! zo
+68
+normal! zo
+71
+normal! zo
+43
+normal! zo
+47
+normal! zo
+50
+normal! zo
+56
+normal! zo
+59
+normal! zo
+62
+normal! zo
+65
+normal! zo
+68
+normal! zo
+71
+normal! zo
+46
+normal! zo
+50
+normal! zo
+56
+normal! zo
+59
+normal! zo
+62
+normal! zo
+65
+normal! zo
+68
+normal! zo
+71
+normal! zo
+50
+normal! zo
+56
+normal! zo
+59
+normal! zo
+62
+normal! zo
+65
+normal! zo
+68
+normal! zo
+71
+normal! zo
+53
+normal! zo
+57
+normal! zo
+59
+normal! zo
+62
+normal! zo
+65
+normal! zo
+68
+normal! zo
+71
+normal! zo
+60
+normal! zo
+61
+normal! zo
+64
+normal! zo
+67
+normal! zo
+70
+normal! zo
+73
+normal! zo
+76
+normal! zo
+let s:l = 59 - ((40 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-35
-normal! 09|
+59
+normal! 015|
 wincmd w
 argglobal
 if bufexists("components/QuestTile/style.module.scss") | buffer components/QuestTile/style.module.scss | else | edit components/QuestTile/style.module.scss | endif
@@ -103,21 +236,58 @@ setlocal fdl=6
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-3
+4
 normal! zo
-13
+14
 normal! zo
-27
+134
 normal! zo
-let s:l = 13 - ((12 * winheight(0) + 22) / 45)
+135
+normal! zo
+136
+normal! zo
+let s:l = 142 - ((22 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-13
-normal! 05|
+142
+normal! 025|
 wincmd w
+2wincmd w
 exe 'vert 1resize ' . ((&columns * 104 + 104) / 208)
 exe 'vert 2resize ' . ((&columns * 103 + 104) / 208)
+tabedit components/QuestTile/Controls.tsx
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
+argglobal
+setlocal fdm=syntax
+setlocal fde=0
+setlocal fmr={{{,}}}
+setlocal fdi=#
+setlocal fdl=6
+setlocal fml=1
+setlocal fdn=20
+setlocal fen
+23
+normal! zo
+104
+normal! zo
+107
+normal! zo
+116
+normal! zo
+let s:l = 131 - ((27 * winheight(0) + 22) / 45)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+131
+normal! 028|
 tabedit pages/QuestList.tsx
 set splitbelow splitright
 set nosplitbelow
@@ -132,115 +302,347 @@ setlocal fdm=syntax
 setlocal fde=0
 setlocal fmr={{{,}}}
 setlocal fdi=#
-setlocal fdl=5
+setlocal fdl=0
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-28
+1
 normal! zo
-135
+18
 normal! zo
-198
+26
 normal! zo
-200
+38
 normal! zo
-201
+39
 normal! zo
-223
+48
 normal! zo
-227
+55
 normal! zo
-228
+56
 normal! zo
-239
+59
 normal! zo
-240
+61
 normal! zo
-208
+73
 normal! zo
-223
+74
 normal! zo
-227
+75
 normal! zo
-228
+89
 normal! zo
-239
+92
 normal! zo
-240
+93
 normal! zo
-217
+100
 normal! zo
-227
+109
 normal! zo
-228
+113
 normal! zo
-239
+114
 normal! zo
-240
+117
 normal! zo
-239
+125
 normal! zo
-240
+126
 normal! zo
-227
+127
 normal! zo
-228
+30
 normal! zo
-239
+42
 normal! zo
-240
+43
 normal! zo
-226
+48
 normal! zo
-230
+55
 normal! zo
-231
+56
 normal! zo
-234
+59
 normal! zo
-240
+61
 normal! zo
-242
+73
 normal! zo
-243
+74
 normal! zo
-244
+75
 normal! zo
-let s:l = 54 - ((41 * winheight(0) + 22) / 45)
+89
+normal! zo
+92
+normal! zo
+93
+normal! zo
+100
+normal! zo
+109
+normal! zo
+113
+normal! zo
+114
+normal! zo
+117
+normal! zo
+125
+normal! zo
+126
+normal! zo
+127
+normal! zo
+55
+normal! zo
+56
+normal! zo
+59
+normal! zo
+61
+normal! zo
+73
+normal! zo
+74
+normal! zo
+75
+normal! zo
+89
+normal! zo
+92
+normal! zo
+93
+normal! zo
+100
+normal! zo
+109
+normal! zo
+113
+normal! zo
+114
+normal! zo
+117
+normal! zo
+125
+normal! zo
+126
+normal! zo
+127
+normal! zo
+52
+normal! zo
+57
+normal! zo
+59
+normal! zo
+61
+normal! zo
+73
+normal! zo
+74
+normal! zo
+75
+normal! zo
+89
+normal! zo
+92
+normal! zo
+93
+normal! zo
+100
+normal! zo
+109
+normal! zo
+113
+normal! zo
+114
+normal! zo
+117
+normal! zo
+125
+normal! zo
+126
+normal! zo
+127
+normal! zo
+59
+normal! zo
+60
+normal! zo
+63
+normal! zo
+65
+normal! zo
+73
+normal! zo
+74
+normal! zo
+75
+normal! zo
+89
+normal! zo
+92
+normal! zo
+93
+normal! zo
+100
+normal! zo
+109
+normal! zo
+113
+normal! zo
+114
+normal! zo
+117
+normal! zo
+125
+normal! zo
+126
+normal! zo
+127
+normal! zo
+74
+normal! zo
+74
+normal! zo
+75
+normal! zo
+89
+normal! zo
+92
+normal! zo
+93
+normal! zo
+100
+normal! zo
+109
+normal! zo
+113
+normal! zo
+114
+normal! zo
+117
+normal! zo
+125
+normal! zo
+126
+normal! zo
+127
+normal! zo
+75
+normal! zo
+75
+normal! zo
+77
+normal! zo
+78
+normal! zo
+79
+normal! zo
+89
+normal! zo
+92
+normal! zo
+93
+normal! zo
+100
+normal! zo
+109
+normal! zo
+113
+normal! zo
+114
+normal! zo
+117
+normal! zo
+125
+normal! zo
+126
+normal! zo
+127
+normal! zo
+101
+normal! zo
+93
+normal! zo
+96
+normal! zo
+97
+normal! zo
+109
+normal! zo
+113
+normal! zo
+114
+normal! zo
+117
+normal! zo
+125
+normal! zo
+126
+normal! zo
+127
+normal! zo
+104
+normal! zo
+113
+normal! zo
+114
+normal! zo
+117
+normal! zo
+125
+normal! zo
+126
+normal! zo
+127
+normal! zo
+125
+normal! zo
+126
+normal! zo
+127
+normal! zo
+113
+normal! zo
+114
+normal! zo
+117
+normal! zo
+125
+normal! zo
+126
+normal! zo
+127
+normal! zo
+113
+normal! zo
+117
+normal! zo
+118
+normal! zo
+121
+normal! zo
+127
+normal! zo
+129
+normal! zo
+130
+normal! zo
+131
+normal! zo
+let s:l = 91 - ((38 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-54
-normal! 024|
-tabedit App.tsx
-set splitbelow splitright
-set nosplitbelow
-set nosplitright
-wincmd t
-set winminheight=0
-set winheight=1
-set winminwidth=0
-set winwidth=1
-argglobal
-setlocal fdm=syntax
-setlocal fde=0
-setlocal fmr={{{,}}}
-setlocal fdi=#
-setlocal fdl=6
-setlocal fml=1
-setlocal fdn=20
-setlocal fen
-22
-normal! zo
-58
-normal! zo
-let s:l = 70 - ((29 * winheight(0) + 22) / 45)
-if s:l < 1 | let s:l = 1 | endif
-exe s:l
-normal! zt
-70
-normal! 020|
-tabnext 2
+91
+normal! 059|
+tabnext 1
 set stal=1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
