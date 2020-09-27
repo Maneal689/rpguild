@@ -60,7 +60,7 @@ function App() {
         <LoginRoute exact path={["/", "/home"]}>
           <Home />
         </LoginRoute>
-        <AuthRoute exact path="/selection">
+        <AuthRoute exact path="/selection/:tab?">
           <Selection />
         </AuthRoute>
         <AuthRoute exact path="/createQuest">

@@ -37,6 +37,9 @@
       &:hover {
         cursor: default;
       }
+      .content {
+        overflow-y: scroll;
+      }
       .quit {
         position: absolute;
         background: none;
@@ -52,6 +55,9 @@
     width: 100%;
     box-sizing: border-box;
     border-radius: 10px;
+    &:hover {
+      cursor: pointer;
+    }
     .image {
       display: flex;
       align-items: center;
@@ -63,7 +69,6 @@
     .content {
       width: 80%;
       max-height: 100%;
-      overflow-y: scroll;
       h2 {
         margin: 0;
         margin-bottom: 0.3em;

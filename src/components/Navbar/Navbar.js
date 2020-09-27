@@ -18,7 +18,7 @@ function getItems(children, right = false) {
   return React.Children.map(children, (child) => {
     if (
       child.type.name === NavbarItem.name &&
-      child.props.right == (right == false ? undefined : true)
+      child.props.right === (right === false ? undefined : true)
     )
       return child;
     return null;

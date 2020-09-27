@@ -140,6 +140,7 @@ function QuestList() {
     if (!applyQuestOnly) {
       db.collection("quests")
         .where("started", "==", false)
+        .where("private", "==", false)
         .orderBy("date", "desc")
         .limit(20)
         .get()
@@ -160,6 +161,7 @@ function QuestList() {
     } else {
       db.collection("quests")
         .where(`participants.${user.uid}.character`, "==", character.id)
+        .where("started", "==", false)
         .get()
         .then((snapshot) => {
           let res: QuestInfoType[] = [];
@@ -180,6 +182,7 @@ function QuestList() {
     setLoading(true);
     db.collection("quests")
       .where("started", "==", false)
+      .where("private", "==", false)
       .orderBy("date", "desc")
       .limit(20)
       .startAfter(lastQDoc)

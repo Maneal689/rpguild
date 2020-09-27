@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Link } from "react-router-dom";
 import { useRecoilValue, useRecoilState } from "recoil";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams, Link } from "react-router-dom";
 
 import { db } from "../services/firebase";
 import userState from "../store/user";
@@ -9,15 +8,22 @@ import characterState from "../store/character";
 import { QuestInfoType } from "../types/Quest";
 import { CharacterDataType } from "../types/Character";
 
-import { Tab, TabToggler } from "../components/Tabs";
+import { Tab } from "../components/Tabs";
 import SiteNavbar from "../components/SiteNavbar";
+import { QuestTile } from "../components/QuestTile";
+
+import styles from "../styles/Selection.module.scss";
 
 const Selection = () => {
   const user = useRecoilValue(userState);
   const [character, setCharacter] = useRecoilState(characterState);
+
   const [characterList, setCharacterList] = useState<CharacterDataType[]>([]);
   const [masterQuestList, setMasterQuestList] = useState<QuestInfoType[]>([]);
-  const [activeTab, setActiveTab] = useState<string>("character");
+
+  const { tab } = useParams();
+  const activeTab = tab ? tab : "character";
+
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -107,28 +113,23 @@ const Selection = () => {
         </ul>
         <button onClick={createCharacter}>Create new character</button>
       </Tab>
-      <Tab active={activeTab === "master"}>
+      <Tab active={activeTab === "quest"}>
         {/* TODO: <QuestTile /> */}
         {masterQuestList.map((quest, index) => (
-          <div
+          <QuestTile
             key={index}
-            style={{ overflow: "hidden" }}
-            onClick={() => {
-              if (quest.started) hist.push(`/quest/${quest.id}`);
-              else hist.push(`/quest/apply/${quest.id}`);
-            }}
-          >
-            {JSON.stringify(quest)}
-          </div>
+            quest={quest}
+            questList={masterQuestList}
+            dispatchQuest={null}
+            master
+          />
         ))}
-        <Link to="/createQuest">Créer une nouvelle quête</Link>
+        <Link to="/createQuest" className={styles.createQuestBtn}>Créer une nouvelle quête</Link>
       </Tab>
-      <TabToggler targetKey="character" setActiveKey={setActiveTab}>
-        Personnages
-      </TabToggler>
-      <TabToggler targetKey="master" setActiveKey={setActiveTab}>
-        Quêtes gérées
-      </TabToggler>
+      <div className={styles.bottomNav}>
+        <Link to="/selection/character" className={activeTab === "character" ? styles.active : ""}>Personnages</Link>
+        <Link to="/selection/quest" className={activeTab === "quest" ? styles.active : ""}>Quêtes gérées</Link>
+      </div>
     </div>
   );
 };

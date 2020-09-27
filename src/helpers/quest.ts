@@ -48,7 +48,25 @@ export const validPToQuest = function (
     .doc(userId)
     .collection("characters")
     .doc(characterId)
-    .update({ currentQuest: quest.id });
+    .update({ currentQuest: quest.id })
+    .then(() => { // Add user to default room participants
+      return db
+        .collection("quests")
+        .doc(quest.id)
+        .collection("rooms")
+        .where("title", "==", "default")
+        .get()
+        .then((defaultRoomDoc) => {
+          return db
+            .collection("quests")
+            .doc(quest.id)
+            .collection("rooms")
+            .doc(defaultRoomDoc.docs[0].id)
+            .update({
+              participants: firestore.FieldValue.arrayUnion(userId),
+            });
+        });
+    });
 
   for (let q of appliedQuestList) {
     if (q.id !== quest.id) promises.push(unapplyToQuest(q, userId));

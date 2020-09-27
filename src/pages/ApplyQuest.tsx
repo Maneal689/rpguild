@@ -11,14 +11,14 @@ import characterState from "../store/character";
 import CharacterTile from "../components/CharacterTile";
 import SiteNavbar from "../components/SiteNavbar";
 
-const ApplyQuest = function (props: any) {
+const ApplyQuest = function () {
   const user = useRecoilValue(userState);
   const character = useRecoilValue(characterState);
   const { id: questId } = useParams();
   const hist = useHistory();
 
   const [quest, setQuest] = useState<QuestInfoType | null>(null);
-  const [validatedParticipants, setValidatedParticipants] = useState<{
+  const [participants, setParticipants] = useState<{
     [userId: string]: CharacterDataType;
   }>({});
   const [loadingParticipants, setLoadingParticipants] = useState<boolean>(true);
@@ -46,11 +46,16 @@ const ApplyQuest = function (props: any) {
 
   // Redirect if character selected or not master
   useEffect(() => {
-    if ((!character.loading && character.id) || !isMaster) {
+    if (
+      (!character.loading && character.id) ||
+      !isMaster ||
+      (quest && quest.started)
+    ) {
       if (character.id) hist.replace("/quest/lists");
+      else if (quest && quest.started) hist.replace(`/quest/${quest.id}`);
       else hist.replace("/selection");
     }
-  }, [character.id, character.loading, hist, isMaster]);
+  }, [character.id, character.loading, hist, isMaster, quest]);
 
   // Get quest informations
   useEffect(() => {
@@ -60,39 +65,47 @@ const ApplyQuest = function (props: any) {
   // Get all participant informations
   useEffect(() => {
     if (quest) {
-      const { participants } = quest as QuestInfoType;
+      const { participants: pList } = quest as QuestInfoType;
       let promises: Promise<any>[] = [];
       // Get all participants character info
-      Object.keys(participants).forEach((userId) => {
-        const participant = participants[userId];
-        if (isMaster || participant.status === "member") {
-          // Master => all participants, not master => only already accepted
-          const promise = db
-            .collection("users")
-            .doc(userId)
-            .collection("characters")
-            .doc(participant.character)
-            .get();
+      Object.keys(pList).forEach((userId) => {
+        const participant = pList[userId];
+        const promise = db
+          .collection("users")
+          .doc(userId)
+          .collection("characters")
+          .doc(participant.character)
+          .get();
 
-          promise.then((characterDoc) => {
-            setValidatedParticipants((old: any) =>
-              Object.assign({}, old, {
-                [userId]: {
-                  id: characterDoc.id,
-                  status: participant.status,
-                  ...characterDoc.data() as CharacterDataType,
-                },
-              })
-            );
-          });
-          promises.push(promise);
-        }
+        promise.then((characterDoc) => {
+          setParticipants((old: any) =>
+            Object.assign({}, old, {
+              [userId]: {
+                id: characterDoc.id,
+                status: participant.status,
+                ...(characterDoc.data() as CharacterDataType),
+              },
+            })
+          );
+        });
+        promises.push(promise);
       });
       Promise.all(promises).then(() => {
         setLoadingParticipants(false);
       });
     }
   }, [isMaster, quest, user.uid]);
+
+  const startQuest = useCallback(() => {
+    if (quest) {
+      db.collection("quests")
+        .doc(quest.id)
+        .update({ started: true })
+        .then(() => {
+          hist.replace(`/quest/${quest.id}`);
+        });
+    }
+  }, [hist, quest]);
 
   return (
     <div className="content">
@@ -103,17 +116,18 @@ const ApplyQuest = function (props: any) {
           Tranche de niveaux: {quest.levelMin} - {quest.levelMax}
           <br />
           <ul>
-            {Object.keys(validatedParticipants).map((userId, index) => (
+            {Object.keys(participants).map((userId, index) => (
               <CharacterTile
                 userId={userId}
                 quest={quest as QuestInfoType}
-                participant={validatedParticipants[userId]}
+                participant={participants[userId]}
                 key={index}
                 fetchData={initData}
               />
             ))}
           </ul>
           {loadingParticipants && "loading..."}
+          <button onClick={startQuest}>Lancer la quête</button>
           <span>{error}</span>
         </>
       )}

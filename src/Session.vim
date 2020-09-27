@@ -9,7 +9,7 @@ endif
 set shortmess=aoO
 badd +12 App.tsx
 badd +1 services/firebase-admin.js
-badd +26 services/firebase.js
+badd +13 services/firebase.js
 badd +9 helpers/auth.js
 badd +11 store/index.ts
 badd +1 store/usersReducer.ts
@@ -27,7 +27,7 @@ badd +6 App.test.tsx
 badd +22 components/Carousel/Carousel.js
 badd +5 store/character.ts
 badd +5 components/Navbar/index.js
-badd +7 components/Navbar/Navbar.js
+badd +22 components/Navbar/Navbar.js
 badd +6 components/Navbar/navbar.module.css
 badd +3 styles/dashboard.module.scss
 badd +7 components/Tabs/index.js
@@ -37,33 +37,38 @@ badd +3 components/CharactersTab/index.ts
 badd +43 components/CharactersTab/CharactersTab.tsx
 badd +2 components/Selection/index.ts
 badd +85 components/Selection/Selection.tsx
-badd +9 types/Quest.ts
-badd +53 pages/Quest.tsx
-badd +40 pages/CreateQuest.tsx
+badd +6 types/Quest.ts
+badd +138 pages/Quest.tsx
+badd +35 pages/CreateQuest.tsx
 badd +3 components/ApplyQuest/index.ts
 badd +1 components/ApplyQuest/ApplyQuest.tsx
 badd +3 components/SiteNavbar/index.ts
 badd +14 components/SiteNavbar/SiteNavbar.tsx
 badd +1 components/ApplyQuest/CharacterTile.tsx
-badd +9 pages/ApplyQuest.tsx
+badd +87 pages/ApplyQuest.tsx
 badd +10 components/CharacterTile/CharacterTile.tsx
-badd +36 components/QuestTile/QuestTile.tsx
-badd +259 pages/QuestList.tsx
+badd +66 components/QuestTile/QuestTile.tsx
+badd +172 pages/QuestList.tsx
 badd +158 components/QuestTile/style.module.scss
-badd +1 helpers/quest.ts
-badd +3 helpers/questListReducer.ts
+badd +48 helpers/quest.ts
+badd +76 helpers/questListReducer.ts
 badd +11 App.css
-badd +47 styles/QuestList.module.scss
+badd +59 styles/QuestList.module.scss
 badd +26 components/SignText.tsx
 badd +6 components/QuestTile/index.ts
 badd +1 components/QuestTile/SelectedQuestTileWrapper.tsx
 badd +88 components/QuestTile/HelpTile.tsx
-badd +108 components/QuestTile/Controls.tsx
+badd +9 components/QuestTile/Controls.tsx
+badd +25 pages/Selection.tsx
+badd +54 components/CharacterTile/Controls.tsx
+badd +24 components/QuestRooms/QuestRooms.tsx
+badd +0 types/Character.ts
+badd +5 hooks/useInputs.ts
 argglobal
 %argdel
 $argadd App.tsx
 set stal=2
-edit helpers/questListReducer.ts
+edit components/QuestRooms/QuestRooms.tsx
 set splitbelow splitright
 set nosplitbelow
 set nosplitright
@@ -77,25 +82,21 @@ setlocal fdm=syntax
 setlocal fde=0
 setlocal fmr={{{,}}}
 setlocal fdi=#
-setlocal fdl=4
+setlocal fdl=5
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-5
+23
 normal! zo
-let s:l = 76 - ((34 * winheight(0) + 22) / 45)
+let s:l = 43 - ((9 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-76
-normal! 015|
+43
+normal! 0
 lcd ~/work/projects/rpguild/src
-tabedit ~/work/projects/rpguild/src/pages/QuestList.tsx
+tabedit ~/work/projects/rpguild/src/pages/Quest.tsx
 set splitbelow splitright
-wincmd _ | wincmd |
-vsplit
-1wincmd h
-wincmd w
 set nosplitbelow
 set nosplitright
 wincmd t
@@ -103,8 +104,6 @@ set winminheight=0
 set winheight=1
 set winminwidth=0
 set winwidth=1
-exe 'vert 1resize ' . ((&columns * 104 + 104) / 208)
-exe 'vert 2resize ' . ((&columns * 103 + 104) / 208)
 argglobal
 setlocal fdm=syntax
 setlocal fde=0
@@ -114,108 +113,567 @@ setlocal fdl=0
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-1
+15
 normal! zo
-28
-normal! zo
-29
+21
 normal! zo
 32
 normal! zo
+36
+normal! zo
 37
-normal! zo
-40
-normal! zo
-45
 normal! zo
 48
 normal! zo
-56
+52
 normal! zo
-59
+53
 normal! zo
-67
+63
 normal! zo
-91
+64
 normal! zo
-98
+66
 normal! zo
-100
+73
+normal! zo
+75
+normal! zo
+76
+normal! zo
+85
+normal! zo
+92
+normal! zo
+93
+normal! zo
+99
 normal! zo
 101
 normal! zo
-106
+102
 normal! zo
-110
+114
 normal! zo
-111
+117
 normal! zo
-121
+118
 normal! zo
-122
+126
 normal! zo
-130
+127
+normal! zo
+136
 normal! zo
 137
 normal! zo
-140
+138
 normal! zo
 146
 normal! zo
+147
+normal! zo
 148
+normal! zo
+150
+normal! zo
+176
+normal! zo
+184
+normal! zo
+192
+normal! zo
+48
+normal! zo
+52
+normal! zo
+53
+normal! zo
+63
+normal! zo
+64
+normal! zo
+66
+normal! zo
+73
+normal! zo
+75
+normal! zo
+76
+normal! zo
+85
+normal! zo
+92
+normal! zo
+93
+normal! zo
+99
+normal! zo
+101
+normal! zo
+102
+normal! zo
+114
+normal! zo
+117
+normal! zo
+118
+normal! zo
+126
+normal! zo
+127
+normal! zo
+136
+normal! zo
+137
+normal! zo
+138
+normal! zo
+146
+normal! zo
+147
+normal! zo
+148
+normal! zo
+150
+normal! zo
+176
+normal! zo
+184
+normal! zo
+192
+normal! zo
+50
+normal! zo
+54
+normal! zo
+55
+normal! zo
+63
+normal! zo
+64
+normal! zo
+66
+normal! zo
+73
+normal! zo
+75
+normal! zo
+76
+normal! zo
+85
+normal! zo
+92
+normal! zo
+93
+normal! zo
+99
+normal! zo
+101
+normal! zo
+102
+normal! zo
+114
+normal! zo
+117
+normal! zo
+118
+normal! zo
+126
+normal! zo
+127
+normal! zo
+136
+normal! zo
+137
+normal! zo
+138
+normal! zo
+146
+normal! zo
+147
+normal! zo
+148
+normal! zo
+150
+normal! zo
+176
+normal! zo
+184
+normal! zo
+192
+normal! zo
+65
+normal! zo
+66
+normal! zo
+68
+normal! zo
+75
+normal! zo
+77
+normal! zo
+78
+normal! zo
+85
+normal! zo
+92
+normal! zo
+93
+normal! zo
+99
+normal! zo
+101
+normal! zo
+102
+normal! zo
+114
+normal! zo
+117
+normal! zo
+118
+normal! zo
+126
+normal! zo
+127
+normal! zo
+136
+normal! zo
+137
+normal! zo
+138
+normal! zo
+146
+normal! zo
+147
+normal! zo
+148
+normal! zo
+150
+normal! zo
+176
+normal! zo
+184
+normal! zo
+192
+normal! zo
+92
+normal! zo
+93
+normal! zo
+99
+normal! zo
+101
+normal! zo
+102
+normal! zo
+114
+normal! zo
+117
+normal! zo
+118
+normal! zo
+126
+normal! zo
+127
+normal! zo
+136
+normal! zo
+137
+normal! zo
+138
+normal! zo
+146
+normal! zo
+147
+normal! zo
+148
+normal! zo
+150
+normal! zo
+176
+normal! zo
+184
+normal! zo
+192
+normal! zo
+87
+normal! zo
+92
+normal! zo
+93
+normal! zo
+99
+normal! zo
+101
+normal! zo
+102
+normal! zo
+114
+normal! zo
+117
+normal! zo
+118
+normal! zo
+126
+normal! zo
+127
+normal! zo
+136
+normal! zo
+137
+normal! zo
+138
+normal! zo
+146
+normal! zo
+147
+normal! zo
+148
+normal! zo
+150
+normal! zo
+176
+normal! zo
+184
+normal! zo
+192
+normal! zo
+92
+normal! zo
+93
+normal! zo
+99
+normal! zo
+101
+normal! zo
+102
+normal! zo
+114
+normal! zo
+117
+normal! zo
+118
+normal! zo
+126
+normal! zo
+127
+normal! zo
+136
+normal! zo
+137
+normal! zo
+138
+normal! zo
+146
+normal! zo
+147
+normal! zo
+148
+normal! zo
+150
+normal! zo
+176
+normal! zo
+184
+normal! zo
+192
+normal! zo
+94
+normal! zo
+95
+normal! zo
+101
+normal! zo
+103
+normal! zo
+104
+normal! zo
+114
+normal! zo
+117
+normal! zo
+118
+normal! zo
+126
+normal! zo
+127
+normal! zo
+136
+normal! zo
+137
+normal! zo
+138
+normal! zo
+146
+normal! zo
+147
+normal! zo
+148
+normal! zo
+150
+normal! zo
+176
+normal! zo
+184
+normal! zo
+192
+normal! zo
+114
+normal! zo
+117
+normal! zo
+118
+normal! zo
+126
+normal! zo
+127
+normal! zo
+136
+normal! zo
+137
+normal! zo
+138
+normal! zo
+146
+normal! zo
+147
+normal! zo
+148
+normal! zo
+150
+normal! zo
+176
+normal! zo
+184
+normal! zo
+192
+normal! zo
+114
+normal! zo
+117
+normal! zo
+118
+normal! zo
+126
+normal! zo
+127
+normal! zo
+136
+normal! zo
+137
+normal! zo
+138
+normal! zo
+146
+normal! zo
+147
+normal! zo
+148
+normal! zo
+150
+normal! zo
+176
+normal! zo
+184
+normal! zo
+192
+normal! zo
+116
+normal! zo
+119
+normal! zo
+120
+normal! zo
+128
+normal! zo
+129
+normal! zo
+139
+normal! zo
+140
+normal! zo
+141
+normal! zo
+143
+normal! zo
+150
+normal! zo
+150
 normal! zo
 152
 normal! zo
-164
+152
 normal! zo
-166
+153
 normal! zo
-170
+154
 normal! zo
-179
+156
 normal! zo
-187
+158
 normal! zo
-189
+159
 normal! zo
-193
+163
 normal! zo
-205
+174
+normal! zo
+191
+normal! zo
+199
 normal! zo
 207
 normal! zo
-213
+169
 normal! zo
-218
+178
+normal! zo
+179
+normal! zo
+181
+normal! zo
+183
+normal! zo
+184
+normal! zo
+189
+normal! zo
+202
+normal! zo
+207
+normal! zo
+215
+normal! zo
+203
+normal! zo
+211
 normal! zo
 219
 normal! zo
-227
+203
 normal! zo
-237
+211
 normal! zo
-238
+219
 normal! zo
-241
-normal! zo
-249
-normal! zo
-253
-normal! zo
-267
-normal! zo
-268
-normal! zo
-let s:l = 270 - ((32 * winheight(0) + 22) / 45)
+let s:l = 221 - ((38 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-270
-normal! 0
+221
+normal! 066|
 lcd ~/work/projects/rpguild/src
-wincmd w
+tabedit ~/work/projects/rpguild/src/types/Quest.ts
+set splitbelow splitright
+set nosplitbelow
+set nosplitright
+wincmd t
+set winminheight=0
+set winheight=1
+set winminwidth=0
+set winwidth=1
 argglobal
-if bufexists("~/work/projects/rpguild/src/styles/QuestList.module.scss") | buffer ~/work/projects/rpguild/src/styles/QuestList.module.scss | else | edit ~/work/projects/rpguild/src/styles/QuestList.module.scss | endif
 setlocal fdm=syntax
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -224,19 +682,13 @@ setlocal fdl=3
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
-46
-normal! zo
-let s:l = 53 - ((29 * winheight(0) + 22) / 45)
+let s:l = 2 - ((1 * winheight(0) + 22) / 45)
 if s:l < 1 | let s:l = 1 | endif
 exe s:l
 normal! zt
-53
-normal! 025|
+2
+normal! 0
 lcd ~/work/projects/rpguild/src
-wincmd w
-2wincmd w
-exe 'vert 1resize ' . ((&columns * 104 + 104) / 208)
-exe 'vert 2resize ' . ((&columns * 103 + 104) / 208)
 tabnext 2
 set stal=1
 if exists('s:wipebuf') && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'

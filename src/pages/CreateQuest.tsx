@@ -36,8 +36,14 @@ function CreateQuest() {
 
     db.collection("quests")
       .add(newQuest)
-      .then(() => {
-        hist.push("/selection");
+      .then((qDoc) => {
+        db.collection("quests")
+          .doc(qDoc.id)
+          .collection("rooms")
+          .add({ title: "default", participants: [] })
+          .then(() => {
+            hist.push("/selection");
+          });
       })
       .catch((e) => setError(e.message));
   };

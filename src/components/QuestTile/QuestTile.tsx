@@ -16,10 +16,11 @@ interface Props {
   questList: QuestInfoType[];
   dispatchQuest: any;
   fullscreen?: boolean;
+  master?: boolean;
 }
 
 function QuestTile(props: Props) {
-  const { quest, dispatchQuest } = props;
+  const { quest, dispatchQuest, master } = props;
   const user = useRecoilValue(userState);
   const hist = useHistory();
 
@@ -33,7 +34,6 @@ function QuestTile(props: Props) {
 
   return (
     <motion.li
-      // layoutId={`quest-tile-${quest.id}`}
       layout
       layoutId={`quest-tile-${quest.id}-${props.fullscreen ? "f" : "t"}`}
       className={`${styles.questTile} ${
@@ -43,7 +43,7 @@ function QuestTile(props: Props) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={() => {
-        hist.push("/quest/lists");
+        if (props.fullscreen) hist.push("/quest/lists");
       }}
     >
       <motion.div
@@ -51,7 +51,10 @@ function QuestTile(props: Props) {
         layoutId={`quest-container-${quest.id}`}
         layout
         onClick={(e) => {
-          if (!props.fullscreen) hist.push(`/quest/lists/${quest.id}`);
+          if (master) {
+            if (quest.started) hist.push(`/quest/${quest.id}`);
+            else hist.push(`/quest/apply/${quest.id}`);
+          } else if (!props.fullscreen) hist.push(`/quest/lists/${quest.id}`);
           e.stopPropagation();
         }}
       >
@@ -99,11 +102,13 @@ function QuestTile(props: Props) {
               {nbMember(quest)} / {quest.wantedParticipants}
             </span>
             <span className={styles.controls}>
-              <Controls
-                quest={quest}
-                questList={props.questList}
-                dispatchQuest={dispatchQuest}
-              />
+              {!master && (
+                <Controls
+                  quest={quest}
+                  questList={props.questList}
+                  dispatchQuest={dispatchQuest}
+                />
+              )}
             </span>
           </motion.section>
         </motion.div>
