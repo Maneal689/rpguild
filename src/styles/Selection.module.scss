@@ -1,5 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Gabriela&display=swap");
 
+.questList {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
 .bottomNav {
   display: flex;
   justify-content: space-around;
@@ -7,7 +13,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background-color: #EEE;
+  background-color: #eee;
   box-sizing: border-box;
   font-family: gabriella;
   &::before {
@@ -15,13 +21,15 @@
     display: block;
     height: 80%;
     width: 1px;
-    background-color: #AAA;
+    background-color: #aaa;
     position: absolute;
     top: 10%;
     left: calc(50% - 0.5px);
   }
   a {
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 1em;
     font-size: 1.1em;
     font-weight: bold;
@@ -29,10 +37,38 @@
     text-decoration: none;
     height: 100%;
     width: 100%;
-    text-align: center;
     transition: all ease 0.3s;
     &.active {
       color: #4e6950;
     }
+    i {
+      font-size: 1.3em;
+      margin-right: 0.4em;
+    }
+  }
+  .createBtn {
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, -50%);
+    width: 55px;
+    height: 55px;
+    font-size: 3em;
+    font-weight: 300;
+    background-color: #4e6950;
+    border-radius: 50%;
+    box-sizing: border-box;
+    border: 3px solid white;
+    color: white;
+  }
+}
+
+@media (min-width: 960px) {
+  .questList {
+    display: flex;
+    justify-content: space-around;
   }
 }

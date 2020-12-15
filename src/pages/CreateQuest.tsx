@@ -5,21 +5,41 @@ import { useRecoilValue } from "recoil";
 import { QuestInfoType } from "../types/Quest";
 import { db } from "../services/firebase";
 import userState from "../store/user";
+import SiteNavbar from "../components/SiteNavbar";
 
-function CreateQuest() {
+import styles from "../styles/CreateQuest.module.scss";
+
+interface Props {
+  defaultQuest?: QuestInfoType;
+  valid?: (edited: boolean) => void;
+}
+
+function CreateQuest(props: Props) {
   const user = useRecoilValue(userState);
-  const [title, setTitle] = useState<string>("");
-  const [desc, setDesc] = useState<string>("");
-  const [levelMin, setLevelMin] = useState<number>(0);
-  const [levelMax, setLevelMax] = useState<number>(20);
-  const [wantedParticipants, setWantedParticipants] = useState<number>(0);
-  const [questType, setQuestType] = useState<string>("public");
+  const { defaultQuest } = props;
+  const [title, setTitle] = useState<string>(
+    defaultQuest ? defaultQuest.title : ""
+  );
+  const [desc, setDesc] = useState<string>(
+    defaultQuest ? defaultQuest.description : ""
+  );
+  const [levelMin, setLevelMin] = useState<number>(
+    defaultQuest ? defaultQuest.levelMin : 1
+  );
+  const [levelMax, setLevelMax] = useState<number>(
+    defaultQuest ? defaultQuest.levelMax : 20
+  );
+  const [wantedParticipants, setWantedParticipants] = useState<number>(
+    defaultQuest ? defaultQuest.wantedParticipants : 1
+  );
+  const [questType, setQuestType] = useState<string>(
+    defaultQuest ? (defaultQuest.private ? "private" : "public") : "public"
+  );
   const [error, setError] = useState<string>("");
 
   const hist = useHistory();
 
-  const onSubmit = function (e: any) {
-    e.preventDefault();
+  function createQuest() {
     const newQuest: QuestInfoType = {
       title,
       description: desc,
@@ -46,10 +66,38 @@ function CreateQuest() {
           });
       })
       .catch((e) => setError(e.message));
+  }
+
+  function editQuest() {
+    if (defaultQuest && props.valid) {
+      const edit: any = {
+        title,
+        description: desc,
+        levelMin,
+        levelMax,
+        wantedParticipants,
+        private: questType === "private",
+      };
+
+      db.collection("quests")
+        .doc(defaultQuest.id)
+        .update(edit)
+        .then(() => {
+          if (props.valid) props.valid(true);
+        })
+        .catch((e) => setError(e.message));
+    }
+  }
+
+  const onSubmit = function (e: any) {
+    e.preventDefault();
+    if (!defaultQuest) createQuest();
+    else editQuest();
   };
 
   return (
     <div className="content">
+      <SiteNavbar />
       <form onSubmit={onSubmit}>
         <input
           type="text"
@@ -57,61 +105,93 @@ function CreateQuest() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Titre de la quête"
+          className={styles.title}
         />
+        <section className={styles.lvlRange}>
+          Niveaux
+          <input
+            id=""
+            type="number"
+            name="levelMin"
+            min="1"
+            max="20"
+            placeholder="Niveau minimum requis"
+            value={levelMin}
+            onChange={(e) => setLevelMin(parseInt(e.target.value))}
+          />
+          à
+          <input
+            id=""
+            type="number"
+            name="levelMax"
+            min="1"
+            max="20"
+            placeholder="Niveau maximum requis"
+            value={levelMax}
+            onChange={(e) => setLevelMax(parseInt(e.target.value))}
+          />
+        </section>
         <textarea
           id=""
           name="desc"
-          cols={30}
-          rows={10}
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
+          className={styles.desc}
           placeholder="Description de la quête + pré-requis"
         ></textarea>
-        <input
-          id=""
-          type="number"
-          name="levelMin"
-          min="0"
-          max="20"
-          placeholder="Niveau minimum requis"
-          value={levelMin}
-          onChange={(e) => setLevelMin(parseInt(e.target.value))}
-        />
-        <input
-          id=""
-          type="number"
-          name="levelMax"
-          min="0"
-          max="20"
-          placeholder="Niveau maximum requis"
-          value={levelMax}
-          onChange={(e) => setLevelMax(parseInt(e.target.value))}
-        />
-        <input
-          id=""
-          type="number"
-          name="nbParticipants"
-          min="0"
-          placeholder="Nombre de participants attendus"
-          value={wantedParticipants}
-          onChange={(e) => setWantedParticipants(parseInt(e.target.value))}
-        />
-        <label htmlFor="selectQuestType">
-          Type de quête:{" "}
-          <span title="Une quête privée ne sera pas suggérée aux autres joueurs, il vous faudra partager le lien de candidature aux différents joueurs.">
-            i
-          </span>
-          <select
-            id="selectQuestType"
-            name="private"
-            value={questType}
-            onChange={(e) => setQuestType(e.target.value)}
-          >
-            <option value="public">Publique</option>
-            <option value="private">Privée</option>
-          </select>
-        </label>
-        <input type="submit" value="Créer la quête" />
+
+        <div className={styles.nbParticipants}>
+          <label htmlFor="nbParticipantsInput">Nombre de participants: </label>
+          <input
+            id="nbParticipantsInput"
+            type="number"
+            name="nbParticipants"
+            min="1"
+            value={wantedParticipants}
+            onChange={(e) => setWantedParticipants(parseInt(e.target.value))}
+          />
+        </div>
+        <section className={styles.questType}>
+          Type de quête :<br />
+          <label>
+            <input
+              id=""
+              type="radio"
+              value="public"
+              checked={questType === "public"}
+              onChange={(e) => setQuestType(e.target.value)}
+            />
+            Publique
+          </label>
+          <label>
+            <input
+              id=""
+              type="radio"
+              value="private"
+              checked={questType === "private"}
+              onChange={(e) => setQuestType(e.target.value)}
+            />
+            Privée
+          </label>
+        </section>
+        <div className={styles.submitBtns}>
+          <input
+            type="submit"
+            value={defaultQuest ? "Valider les changements" : "Créer la quête"}
+          />
+          {defaultQuest && (
+            <button
+              className={styles.cancelBtn}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (props.valid) props.valid(false);
+              }}
+            >
+              Annuler les changements
+            </button>
+          )}
+        </div>
       </form>
       <span>{error}</span>
     </div>

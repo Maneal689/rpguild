@@ -7,6 +7,7 @@ import AuthRoute from "./components/AuthRoute";
 import Home from "./pages/Home";
 import Selection from "./pages/Selection";
 import CreateQuest from "./pages/CreateQuest";
+import CreateCharacter from "./pages/CreateCharacter";
 import Quest from "./pages/Quest";
 import ApplyQuest from "./pages/ApplyQuest";
 import QuestList from "./pages/QuestList";
@@ -66,14 +67,17 @@ function App() {
         <AuthRoute exact path="/createQuest">
           <CreateQuest />
         </AuthRoute>
-        <AuthRoute path="/quest/lists/:id?">
-          <QuestList />
+        <AuthRoute exact path="/createCharacter/:step?">
+          <CreateCharacter/>
         </AuthRoute>
-        <AuthRoute exact path="/quest/:id">
-          <Quest />
+        <AuthRoute exact path="/quest/lists/:id?">
+          <QuestList />
         </AuthRoute>
         <AuthRoute exact path="/quest/apply/:id">
           <ApplyQuest />
+        </AuthRoute>
+        <AuthRoute exact path="/quest/:id">
+          <Quest />
         </AuthRoute>
       </Switch>
     </Router>

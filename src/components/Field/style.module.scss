@@ -1,0 +1,30 @@
+.container {
+  position: relative;
+  text-align: center;
+
+  input {
+    max-width: 80%;
+    margin: 0 auto;
+  }
+  .btns {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    transform-origin: center;
+    transform: scaleX(50%);
+    display: flex;
+    i {
+      padding: 0.1em 0.4em;
+      &:hover {
+        cursor: pointer;
+      }
+      &:first-child {
+        color: green;
+        margin-right: 1em;
+      }
+      &:last-child {
+        color: red;
+      }
+    }
+  }
+}

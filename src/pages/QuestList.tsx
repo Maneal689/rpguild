@@ -57,8 +57,8 @@ const steps = [
     selector: "#quest-list-toggler",
     content: (
       <div>
-        Cliquez ici pour <strong>alterner</strong> entre vos candidatures et toutes les
-        quêtes
+        Cliquez ici pour <strong>alterner</strong> entre vos candidatures et
+        toutes les quêtes
       </div>
     ),
   },
@@ -121,10 +121,10 @@ function QuestList() {
   useEffect(() => {
     if (!loading && !initTour) {
       setInitTour(true);
-      localStorage.setItem("questTour", "true");
       if (localStorage.getItem("questTour") !== "true") setDisplayTour(true);
+      localStorage.setItem("questTour", "true");
     }
-  }, [displayTour, initTour, loading]);
+  }, [initTour, loading]);
 
   // Redirect if no character selected or already in quest
   useEffect(() => {

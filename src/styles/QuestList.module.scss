@@ -62,3 +62,11 @@
 .green {
   color: #4e6950;
 }
+
+@media (min-width: 960px) {
+  .questList {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+  }
+}

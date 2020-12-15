@@ -1,0 +1,34 @@
+.stringInput {
+  position: relative;
+  margin-top: 2.5em;
+  margin-left: 1em;
+  font-size: 1.1em;
+
+  label {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    bottom: 0;
+    height: 100%;
+    left: 1em;
+    color: #AAA;
+    transition: all ease 0.3s;
+  }
+
+  input {
+    border: none;
+    border-bottom: 1px solid #AAA;
+    transition: all ease 0.3s;
+    height: 1.5em;
+
+    &:valid, &:focus {
+      border-bottom: 1px solid #4E6950;
+
+      &+label {
+        bottom: calc(100% + 2px);
+        left: 0;
+        color: #4e6950;
+      }
+    }
+  }
+}

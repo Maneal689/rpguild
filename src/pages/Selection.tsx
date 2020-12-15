@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useRecoilValue, useRecoilState } from "recoil";
 import { useHistory, useParams, Link } from "react-router-dom";
+import Tour from "reactour";
 
 import { db } from "../services/firebase";
 import userState from "../store/user";
@@ -13,6 +14,38 @@ import SiteNavbar from "../components/SiteNavbar";
 import { QuestTile } from "../components/QuestTile";
 
 import styles from "../styles/Selection.module.scss";
+
+const steps = [
+  {
+    selector: "#select-char",
+    content: (
+      <div>
+        Ici vous pouvez voir la liste de vos <strong>personnages</strong>.
+        Cliquez sur l'un d'eux pour le sélectionner et jouer avec !
+      </div>
+    ),
+  },
+  {
+    selector: "#bottom-nav",
+    content: (
+      <div>
+        Ici vous pouvez choisir de voir vos <strong>personnages</strong> ou les{" "}
+        <strong>quêtes</strong> que vous avez créée !<br />
+        Choisissez une de vos quête pour y entrer en tant que{" "}
+        <strong>Maître de Jeu</strong>
+      </div>
+    ),
+  },
+  {
+    selector: "#create-btn",
+    content: (
+      <div>
+        Cliquez sur ce bouton pour <strong>créer</strong> un(e) personnage/quête
+        selon l'onglet dans lequel vous vous trouvez !
+      </div>
+    ),
+  },
+];
 
 const Selection = () => {
   const user = useRecoilValue(userState);
@@ -27,15 +60,19 @@ const Selection = () => {
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
+  const [initTour, setInitTour] = useState<boolean>(false);
+  const [displayTour, setDisplayTour] = useState<boolean>(false);
+
   const hist = useHistory();
 
-  const createCharacter = useCallback(() => {
-    const characterName = window.prompt("Character name: ");
-    db.collection("users")
-      .doc(user.uid)
-      .collection("characters")
-      .add({ name: characterName, level: 0 });
-  }, [user.uid]);
+  useEffect(() => {
+    if (!loading && !initTour) {
+      setInitTour(true);
+      if (localStorage.getItem("selectionTour") !== "true")
+        setDisplayTour(true);
+      localStorage.setItem("selectionTour", "true");
+    }
+  }, [initTour, loading]);
 
   // Redirect if character selected
   useEffect(() => {
@@ -95,9 +132,15 @@ const Selection = () => {
   return (
     <div className="content">
       <SiteNavbar />
+      <Tour
+        isOpen={displayTour}
+        onRequestClose={() => setDisplayTour(false)}
+        steps={steps}
+        accentColor="#4e6950"
+      />
       <Tab active={activeTab === "character"}>
         {/* TODO: <CharacterSelection /> */}
-        <ul>
+        <ul id="select-char">
           {characterList.map((char, index) => (
             <li
               style={{ overflow: "hidden" }}
@@ -111,24 +154,42 @@ const Selection = () => {
             </li>
           ))}
         </ul>
-        <button onClick={createCharacter}>Create new character</button>
       </Tab>
       <Tab active={activeTab === "quest"}>
-        {/* TODO: <QuestTile /> */}
-        {masterQuestList.map((quest, index) => (
-          <QuestTile
-            key={index}
-            quest={quest}
-            questList={masterQuestList}
-            dispatchQuest={null}
-            master
-          />
-        ))}
-        <Link to="/createQuest" className={styles.createQuestBtn}>Créer une nouvelle quête</Link>
+        <ul className={styles.questList}>
+          {masterQuestList.map((quest, index) => (
+            <QuestTile
+              key={index}
+              quest={quest}
+              questList={masterQuestList}
+              dispatchQuest={null}
+              master
+            />
+          ))}
+        </ul>
       </Tab>
-      <div className={styles.bottomNav}>
-        <Link to="/selection/character" className={activeTab === "character" ? styles.active : ""}>Personnages</Link>
-        <Link to="/selection/quest" className={activeTab === "quest" ? styles.active : ""}>Quêtes gérées</Link>
+      <div id="bottom-nav" className={styles.bottomNav}>
+        <Link
+          to="/selection/character"
+          className={activeTab === "character" ? styles.active : ""}
+        >
+          <i className="fas fa-street-view" />
+          Personnages
+        </Link>
+        <Link
+          id="create-btn"
+          to={activeTab === "quest" ? "/createQuest" : "/createCharacter"}
+          className={styles.createBtn}
+        >
+          +
+        </Link>
+        <Link
+          to="/selection/quest"
+          className={activeTab === "quest" ? styles.active : ""}
+        >
+          <i className="far fa-map" />
+          Quêtes gérées
+        </Link>
       </div>
     </div>
   );

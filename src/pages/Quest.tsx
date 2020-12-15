@@ -9,6 +9,7 @@ import userState from "../store/user";
 import characterState from "../store/character";
 import SiteNavbar from "../components/SiteNavbar";
 import QuestRooms from "../components/QuestRooms";
+import Content from "../styles/Content.styled";
 
 import { db } from "../services/firebase";
 
@@ -197,18 +198,23 @@ const Quest = function () {
 
   if (error)
     return (
-      <div className="content">
+      <Content>
         <SiteNavbar />
         <span>Oops! La quête n'a pas été trouvée...</span>
         <Link to="/quest/lists">Retour à la guilde</Link>
-      </div>
+      </Content>
     );
   else if (quest)
     return (
-      <div className="content">
+      <Content>
         <SiteNavbar />
-        <QuestRooms quest={quest} rooms={rooms} messages={messages} characters={characters} />
-      </div>
+        <QuestRooms
+          quest={quest}
+          rooms={rooms}
+          messages={messages}
+          characters={characters}
+        />
+      </Content>
     );
   return <div className="content">loading...</div>;
 };

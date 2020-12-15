@@ -6,6 +6,9 @@ html {
 
 .content {
   padding: 3em 1em;
+  margin: 0 auto;
+  max-width: 1024px;
+  position: relative;
 }
 
 .red {

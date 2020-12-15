@@ -1,7 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, ReactNode } from "react";
+import styled from "styled-components";
 
 import { db } from "../../services/firebase";
 import { QuestInfoType, QuestParticipantStatusType } from "../../types/Quest";
+
+import Icon from "../../styles/Icon.styled";
+
+const Container = styled.div``;
+
+const Control = styled.button`
+  background: none;
+  border: none;
+`;
 
 interface Props {
   quest: QuestInfoType;
@@ -56,23 +66,29 @@ function Controls(props: Props) {
       });
   };
 
-  if (loading) return <div>loading...</div>;
+  let controls: ReactNode = <Icon className="far fa-check-circle" disabled />;
+
+  if (loading) controls = <Icon className="fas fa-spinner fa-spin" />;
   else if (status === "pending")
-    return (
-      <div>
-        <button onClick={accept}>Accepter</button>
-        <button onClick={reject}>Refuser</button>
-      </div>
+    controls = (
+      <>
+        <Control onClick={accept}>
+          <Icon className="far fa-check-circle" green activable />
+        </Control>
+        <Control onClick={reject}>
+          <Icon className="far fa-times-circle" red activable />
+        </Control>
+      </>
     );
   else if (status === "accepted")
-    return <div>Accepté: En attente de la réponse du joueur.</div>;
+    controls = <Icon className="fas fa-hourglass-half" disabled />;
   else if (status === "rejected")
-    return (
-      <div>
-        <button onClick={undoReject}>Annuler le refus</button>
-      </div>
+    controls = (
+      <Control onClick={undoReject}>
+        <Icon className="fas fa-ban" red activable />
+      </Control>
     );
-  else return <div>Membre validé</div>;
+  return <Container>{controls}</Container>;
 }
 
 export default Controls;
